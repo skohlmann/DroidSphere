@@ -7,13 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		455217E3262DA488007388CF /* OverlayScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455217E2262DA488007388CF /* OverlayScene.swift */; };
 		457186BF262AC667007C3BC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457186BE262AC667007C3BC4 /* AppDelegate.swift */; };
-		457186C1262AC667007C3BC4 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 457186C0262AC667007C3BC4 /* art.scnassets */; };
 		457186C3262AC667007C3BC4 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457186C2262AC667007C3BC4 /* GameViewController.swift */; };
 		457186C6262AC667007C3BC4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 457186C4262AC667007C3BC4 /* Main.storyboard */; };
 		457186C8262AC66A007C3BC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 457186C7262AC66A007C3BC4 /* Assets.xcassets */; };
-		457186D3262AC66A007C3BC4 /* RollingSphereTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457186D2262AC66A007C3BC4 /* RollingSphereTests.swift */; };
+		457186D3262AC66A007C3BC4 /* DroidTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457186D2262AC66A007C3BC4 /* DroidTests.swift */; };
 		457186DE262AC66A007C3BC4 /* RollingSphereUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457186DD262AC66A007C3BC4 /* RollingSphereUITests.swift */; };
+		457186F5262AC6F2007C3BC4 /* Droid.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 457186F4262AC6F2007C3BC4 /* Droid.scnassets */; };
+		458FFB5A262AF22B00B18991 /* Actions+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458FFB58262AF22B00B18991 /* Actions+Extensions.swift */; };
+		458FFB5B262AF22B00B18991 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458FFB59262AF22B00B18991 /* Color+Extensions.swift */; };
+		458FFB6F262AF32400B18991 /* GameHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458FFB6C262AF32400B18991 /* GameHelper.swift */; };
+		458FFB77262AF65400B18991 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458FFB76262AF65400B18991 /* Angle.swift */; };
+		458FFB7C262AF69D00B18991 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458FFB7B262AF69D00B18991 /* Map.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,19 +40,25 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		457186BB262AC667007C3BC4 /* RollingSphere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RollingSphere.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		451E2EC8262B65DD00701255 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		455217E2262DA488007388CF /* OverlayScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayScene.swift; sourceTree = "<group>"; };
+		457186BB262AC667007C3BC4 /* Droid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Droid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		457186BE262AC667007C3BC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		457186C0262AC667007C3BC4 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		457186C2262AC667007C3BC4 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		457186C5262AC667007C3BC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		457186C7262AC66A007C3BC4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		457186C9262AC66A007C3BC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		457186CE262AC66A007C3BC4 /* RollingSphereTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RollingSphereTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		457186D2262AC66A007C3BC4 /* RollingSphereTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingSphereTests.swift; sourceTree = "<group>"; };
+		457186CE262AC66A007C3BC4 /* DroidTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DroidTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		457186D2262AC66A007C3BC4 /* DroidTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroidTests.swift; sourceTree = "<group>"; };
 		457186D4262AC66A007C3BC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		457186D9262AC66A007C3BC4 /* RollingSphereUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RollingSphereUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		457186D9262AC66A007C3BC4 /* DroidUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DroidUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		457186DD262AC66A007C3BC4 /* RollingSphereUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingSphereUITests.swift; sourceTree = "<group>"; };
 		457186DF262AC66A007C3BC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		457186F4262AC6F2007C3BC4 /* Droid.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = Droid.scnassets; sourceTree = "<group>"; };
+		458FFB58262AF22B00B18991 /* Actions+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Actions+Extensions.swift"; path = "../../../Sphere/Sphere/Utils/Actions+Extensions.swift"; sourceTree = "<group>"; };
+		458FFB59262AF22B00B18991 /* Color+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Color+Extensions.swift"; path = "../../../Sphere/Sphere/Utils/Color+Extensions.swift"; sourceTree = "<group>"; };
+		458FFB6C262AF32400B18991 /* GameHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHelper.swift; sourceTree = "<group>"; };
+		458FFB76262AF65400B18991 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
+		458FFB7B262AF69D00B18991 /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,9 +89,9 @@
 		457186B2262AC667007C3BC4 = {
 			isa = PBXGroup;
 			children = (
-				457186BD262AC667007C3BC4 /* RollingSphere */,
-				457186D1262AC66A007C3BC4 /* RollingSphereTests */,
-				457186DC262AC66A007C3BC4 /* RollingSphereUITests */,
+				457186BD262AC667007C3BC4 /* Droid */,
+				457186D1262AC66A007C3BC4 /* DroidTests */,
+				457186DC262AC66A007C3BC4 /* DroidUITests */,
 				457186BC262AC667007C3BC4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,50 +99,64 @@
 		457186BC262AC667007C3BC4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				457186BB262AC667007C3BC4 /* RollingSphere.app */,
-				457186CE262AC66A007C3BC4 /* RollingSphereTests.xctest */,
-				457186D9262AC66A007C3BC4 /* RollingSphereUITests.xctest */,
+				457186BB262AC667007C3BC4 /* Droid.app */,
+				457186CE262AC66A007C3BC4 /* DroidTests.xctest */,
+				457186D9262AC66A007C3BC4 /* DroidUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		457186BD262AC667007C3BC4 /* RollingSphere */ = {
+		457186BD262AC667007C3BC4 /* Droid */ = {
 			isa = PBXGroup;
 			children = (
 				457186BE262AC667007C3BC4 /* AppDelegate.swift */,
-				457186C0262AC667007C3BC4 /* art.scnassets */,
 				457186C2262AC667007C3BC4 /* GameViewController.swift */,
+				455217E2262DA488007388CF /* OverlayScene.swift */,
 				457186C4262AC667007C3BC4 /* Main.storyboard */,
 				457186C7262AC66A007C3BC4 /* Assets.xcassets */,
-				457186C9262AC66A007C3BC4 /* Info.plist */,
+				457186F4262AC6F2007C3BC4 /* Droid.scnassets */,
+				458FFB57262AF20F00B18991 /* Utils */,
+				451E2EC8262B65DD00701255 /* Info.plist */,
 			);
-			path = RollingSphere;
+			path = Droid;
 			sourceTree = "<group>";
 		};
-		457186D1262AC66A007C3BC4 /* RollingSphereTests */ = {
+		457186D1262AC66A007C3BC4 /* DroidTests */ = {
 			isa = PBXGroup;
 			children = (
-				457186D2262AC66A007C3BC4 /* RollingSphereTests.swift */,
+				457186D2262AC66A007C3BC4 /* DroidTests.swift */,
 				457186D4262AC66A007C3BC4 /* Info.plist */,
 			);
-			path = RollingSphereTests;
+			path = DroidTests;
 			sourceTree = "<group>";
 		};
-		457186DC262AC66A007C3BC4 /* RollingSphereUITests */ = {
+		457186DC262AC66A007C3BC4 /* DroidUITests */ = {
 			isa = PBXGroup;
 			children = (
 				457186DD262AC66A007C3BC4 /* RollingSphereUITests.swift */,
 				457186DF262AC66A007C3BC4 /* Info.plist */,
 			);
-			path = RollingSphereUITests;
+			path = DroidUITests;
+			sourceTree = "<group>";
+		};
+		458FFB57262AF20F00B18991 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				458FFB6C262AF32400B18991 /* GameHelper.swift */,
+				458FFB58262AF22B00B18991 /* Actions+Extensions.swift */,
+				458FFB59262AF22B00B18991 /* Color+Extensions.swift */,
+				458FFB76262AF65400B18991 /* Angle.swift */,
+				458FFB7B262AF69D00B18991 /* Map.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		457186BA262AC667007C3BC4 /* RollingSphere */ = {
+		457186BA262AC667007C3BC4 /* Droid */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 457186E2262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "RollingSphere" */;
+			buildConfigurationList = 457186E2262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "Droid" */;
 			buildPhases = (
 				457186B7262AC667007C3BC4 /* Sources */,
 				457186B8262AC667007C3BC4 /* Frameworks */,
@@ -140,14 +166,14 @@
 			);
 			dependencies = (
 			);
-			name = RollingSphere;
+			name = Droid;
 			productName = RollingSphere;
-			productReference = 457186BB262AC667007C3BC4 /* RollingSphere.app */;
+			productReference = 457186BB262AC667007C3BC4 /* Droid.app */;
 			productType = "com.apple.product-type.application";
 		};
-		457186CD262AC66A007C3BC4 /* RollingSphereTests */ = {
+		457186CD262AC66A007C3BC4 /* DroidTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 457186E5262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "RollingSphereTests" */;
+			buildConfigurationList = 457186E5262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "DroidTests" */;
 			buildPhases = (
 				457186CA262AC66A007C3BC4 /* Sources */,
 				457186CB262AC66A007C3BC4 /* Frameworks */,
@@ -158,14 +184,14 @@
 			dependencies = (
 				457186D0262AC66A007C3BC4 /* PBXTargetDependency */,
 			);
-			name = RollingSphereTests;
+			name = DroidTests;
 			productName = RollingSphereTests;
-			productReference = 457186CE262AC66A007C3BC4 /* RollingSphereTests.xctest */;
+			productReference = 457186CE262AC66A007C3BC4 /* DroidTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		457186D8262AC66A007C3BC4 /* RollingSphereUITests */ = {
+		457186D8262AC66A007C3BC4 /* DroidUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 457186E8262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "RollingSphereUITests" */;
+			buildConfigurationList = 457186E8262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "DroidUITests" */;
 			buildPhases = (
 				457186D5262AC66A007C3BC4 /* Sources */,
 				457186D6262AC66A007C3BC4 /* Frameworks */,
@@ -176,9 +202,9 @@
 			dependencies = (
 				457186DB262AC66A007C3BC4 /* PBXTargetDependency */,
 			);
-			name = RollingSphereUITests;
+			name = DroidUITests;
 			productName = RollingSphereUITests;
-			productReference = 457186D9262AC66A007C3BC4 /* RollingSphereUITests.xctest */;
+			productReference = 457186D9262AC66A007C3BC4 /* DroidUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -203,7 +229,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 457186B6262AC667007C3BC4 /* Build configuration list for PBXProject "RollingSphere" */;
+			buildConfigurationList = 457186B6262AC667007C3BC4 /* Build configuration list for PBXProject "Droid" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -216,9 +242,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				457186BA262AC667007C3BC4 /* RollingSphere */,
-				457186CD262AC66A007C3BC4 /* RollingSphereTests */,
-				457186D8262AC66A007C3BC4 /* RollingSphereUITests */,
+				457186BA262AC667007C3BC4 /* Droid */,
+				457186CD262AC66A007C3BC4 /* DroidTests */,
+				457186D8262AC66A007C3BC4 /* DroidUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -228,9 +254,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				457186C1262AC667007C3BC4 /* art.scnassets in Resources */,
 				457186C8262AC66A007C3BC4 /* Assets.xcassets in Resources */,
 				457186C6262AC667007C3BC4 /* Main.storyboard in Resources */,
+				457186F5262AC6F2007C3BC4 /* Droid.scnassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,7 +282,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				457186C3262AC667007C3BC4 /* GameViewController.swift in Sources */,
+				458FFB77262AF65400B18991 /* Angle.swift in Sources */,
 				457186BF262AC667007C3BC4 /* AppDelegate.swift in Sources */,
+				458FFB7C262AF69D00B18991 /* Map.swift in Sources */,
+				458FFB5A262AF22B00B18991 /* Actions+Extensions.swift in Sources */,
+				455217E3262DA488007388CF /* OverlayScene.swift in Sources */,
+				458FFB5B262AF22B00B18991 /* Color+Extensions.swift in Sources */,
+				458FFB6F262AF32400B18991 /* GameHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,7 +296,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				457186D3262AC66A007C3BC4 /* RollingSphereTests.swift in Sources */,
+				457186D3262AC66A007C3BC4 /* DroidTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,12 +313,12 @@
 /* Begin PBXTargetDependency section */
 		457186D0262AC66A007C3BC4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 457186BA262AC667007C3BC4 /* RollingSphere */;
+			target = 457186BA262AC667007C3BC4 /* Droid */;
 			targetProxy = 457186CF262AC66A007C3BC4 /* PBXContainerItemProxy */;
 		};
 		457186DB262AC66A007C3BC4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 457186BA262AC667007C3BC4 /* RollingSphere */;
+			target = 457186BA262AC667007C3BC4 /* Droid */;
 			targetProxy = 457186DA262AC66A007C3BC4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -354,7 +386,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -409,7 +441,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -426,12 +458,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U7NWV338ML;
-				INFOPLIST_FILE = RollingSphere/Info.plist;
+				INFOPLIST_FILE = Droid/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = de.speexx.RollingSphere;
+				PRODUCT_BUNDLE_IDENTIFIER = de.speexx.Droid;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -445,12 +477,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U7NWV338ML;
-				INFOPLIST_FILE = RollingSphere/Info.plist;
+				INFOPLIST_FILE = Droid/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = de.speexx.RollingSphere;
+				PRODUCT_BUNDLE_IDENTIFIER = de.speexx.Droid;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -475,7 +507,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RollingSphere.app/RollingSphere";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Droid.app/Droid";
 			};
 			name = Debug;
 		};
@@ -497,7 +529,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RollingSphere.app/RollingSphere";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Droid.app/Droid";
 			};
 			name = Release;
 		};
@@ -544,7 +576,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		457186B6262AC667007C3BC4 /* Build configuration list for PBXProject "RollingSphere" */ = {
+		457186B6262AC667007C3BC4 /* Build configuration list for PBXProject "Droid" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				457186E0262AC66A007C3BC4 /* Debug */,
@@ -553,7 +585,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		457186E2262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "RollingSphere" */ = {
+		457186E2262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "Droid" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				457186E3262AC66A007C3BC4 /* Debug */,
@@ -562,7 +594,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		457186E5262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "RollingSphereTests" */ = {
+		457186E5262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "DroidTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				457186E6262AC66A007C3BC4 /* Debug */,
@@ -571,7 +603,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		457186E8262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "RollingSphereUITests" */ = {
+		457186E8262AC66A007C3BC4 /* Build configuration list for PBXNativeTarget "DroidUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				457186E9262AC66A007C3BC4 /* Debug */,
