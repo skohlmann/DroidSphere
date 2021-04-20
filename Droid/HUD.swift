@@ -9,13 +9,17 @@ import Foundation
 import SpriteKit
 import SceneKit
 
-class OverlayScene : SKScene {
+class HUD : SKScene {
     
     var coordinateLabel : SKLabelNode!
     var overView : GameViewController
+    var joystick : Joystick
 
     init(size: CGSize, scene : GameViewController) {
         self.overView = scene
+        self.joystick = Joystick()
+        self.joystick.position.x = 100
+        self.joystick.position.y = 140
         super.init(size: size)
 
         self.coordinateLabel = SKLabelNode(text: "")
@@ -25,6 +29,7 @@ class OverlayScene : SKScene {
         self.coordinateLabel.fontName = "AvenirNext-Bold"
         self.coordinateLabel.position = CGPoint(x: 20, y: self.size.height - 20)
         self.addChild(self.coordinateLabel)
+        self.addChild(self.joystick)
     }
     
     required init?(coder decoder: NSCoder) {
@@ -52,6 +57,37 @@ class OverlayScene : SKScene {
     }
     
     fileprivate func updateCoordinates(_ touches : Set<UITouch>) {
-        self.coordinateLabel.text =  "Coordinates: x=\(Int((touches.first?.location(in: self).x)!)) - y=\(Int((touches.first?.location(in: self).y)!))"
+        self.coordinateLabel.text =  "Coordinates - current: x=\(Int((touches.first?.location(in: self).x)!)) · y=\(Int((touches.first?.location(in: self).y)!)) - previous: x=\(Int((touches.first?.previousLocation(in: self).x)!)) · y=\(Int((touches.first?.previousLocation(in: self).y)!))"
+    }
+}
+
+class Joystick : SKNode {
+    
+    let joystickMaxMove = CGFloat(30)
+    let joystickMininumMoveDistance = 2
+
+    var joystickActive = false
+    var joystickMoved = false
+
+    var joystickInner : SKShapeNode!
+    var joystickOuter : SKShapeNode!
+
+    override init() {
+        self.joystickInner = SKShapeNode(circleOfRadius: 20)
+        self.joystickInner.fillColor = .red
+        self.joystickInner.strokeColor = .orange
+        self.joystickInner.alpha = 20
+
+        self.joystickOuter = SKShapeNode(circleOfRadius: 20 + joystickMaxMove)
+        self.joystickOuter.fillColor = .clear
+        self.joystickOuter.strokeColor = .red
+
+        super.init()
+        self.addChild(self.joystickInner)
+        self.addChild(self.joystickOuter)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

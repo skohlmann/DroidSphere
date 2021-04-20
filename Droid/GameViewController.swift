@@ -17,7 +17,7 @@ class GameViewController: UIViewController {
     var cameraNode : SCNNode!
     var box : SCNNode!
     
-    var overlayScene : OverlayScene!
+    var overlayScene : HUD!
     var coordinateLabel : SKLabelNode!
 
     var spawnTime : TimeInterval = 0
@@ -34,7 +34,7 @@ class GameViewController: UIViewController {
         self.scnView.showsStatistics = true
         self.scnView.delegate = self
 
-        self.overlayScene = OverlayScene(size: self.scnView.bounds.size, scene: self)
+        self.overlayScene = HUD(size: self.scnView.bounds.size, scene: self)
         self.scnView.overlaySKScene = self.overlayScene
 
         self.scnScene = SCNScene(named: "Droid.scnassets/Scenes/Game.scn")

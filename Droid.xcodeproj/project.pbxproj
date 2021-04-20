@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		455217E3262DA488007388CF /* OverlayScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455217E2262DA488007388CF /* OverlayScene.swift */; };
+		455217E3262DA488007388CF /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455217E2262DA488007388CF /* HUD.swift */; };
 		457186BF262AC667007C3BC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457186BE262AC667007C3BC4 /* AppDelegate.swift */; };
 		457186C3262AC667007C3BC4 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457186C2262AC667007C3BC4 /* GameViewController.swift */; };
 		457186C6262AC667007C3BC4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 457186C4262AC667007C3BC4 /* Main.storyboard */; };
@@ -41,7 +41,7 @@
 
 /* Begin PBXFileReference section */
 		451E2EC8262B65DD00701255 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		455217E2262DA488007388CF /* OverlayScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayScene.swift; sourceTree = "<group>"; };
+		455217E2262DA488007388CF /* HUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUD.swift; sourceTree = "<group>"; };
 		457186BB262AC667007C3BC4 /* Droid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Droid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		457186BE262AC667007C3BC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		457186C2262AC667007C3BC4 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -111,7 +111,7 @@
 			children = (
 				457186BE262AC667007C3BC4 /* AppDelegate.swift */,
 				457186C2262AC667007C3BC4 /* GameViewController.swift */,
-				455217E2262DA488007388CF /* OverlayScene.swift */,
+				455217E2262DA488007388CF /* HUD.swift */,
 				457186C4262AC667007C3BC4 /* Main.storyboard */,
 				457186C7262AC66A007C3BC4 /* Assets.xcassets */,
 				457186F4262AC6F2007C3BC4 /* Droid.scnassets */,
@@ -286,7 +286,7 @@
 				457186BF262AC667007C3BC4 /* AppDelegate.swift in Sources */,
 				458FFB7C262AF69D00B18991 /* Map.swift in Sources */,
 				458FFB5A262AF22B00B18991 /* Actions+Extensions.swift in Sources */,
-				455217E3262DA488007388CF /* OverlayScene.swift in Sources */,
+				455217E3262DA488007388CF /* HUD.swift in Sources */,
 				458FFB5B262AF22B00B18991 /* Color+Extensions.swift in Sources */,
 				458FFB6F262AF32400B18991 /* GameHelper.swift in Sources */,
 			);
