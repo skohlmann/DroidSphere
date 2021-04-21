@@ -57,7 +57,7 @@ class HUD : SKScene {
     }
     
     fileprivate func updateCoordinates(_ touches : Set<UITouch>) {
-        self.coordinateLabel.text =  "Coordinates - current: x=\(Int((touches.first?.location(in: self).x)!)) · y=\(Int((touches.first?.location(in: self).y)!)) - previous: x=\(Int((touches.first?.previousLocation(in: self).x)!)) · y=\(Int((touches.first?.previousLocation(in: self).y)!))"
+        self.coordinateLabel.text =  "Coordinates - current: x=\(Int((touches.first?.location(in: self.joystick).x)!)) · y=\(Int((touches.first?.location(in: self.joystick).y)!)) - previous: x=\(Int((touches.first?.previousLocation(in: self).x)!)) · y=\(Int((touches.first?.previousLocation(in: self).y)!))"
     }
 }
 
