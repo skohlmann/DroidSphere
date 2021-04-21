@@ -79,6 +79,7 @@ class GameViewController: UIViewController {
     }
     
     fileprivate func debugUITouches(_ touches: Set<UITouch>, caller: String) {
+        /*
         var count = 0
         for touch in touches {
             print("\(caller) (\(count)) - force: \(touch.force)")
@@ -88,6 +89,7 @@ class GameViewController: UIViewController {
             count += 1
         }
         print("#########")
+ */
     }
     
 }
