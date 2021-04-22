@@ -19,24 +19,23 @@ class HUD : SKScene {
 
     init(size: CGSize, scene : GameViewController) {
         
-        if debug {
-            print("Size: \(size)")
-        }
-        
         self.overView = scene
         self.joystick = Joystick(name: "left joystick", firstInputIn: Circle(at: CGPoint(x: 0, y: 0), with: size.width / 2))
         self.joystick.position.x = 100
         self.joystick.position.y = 140
         super.init(size: size)
 
-        self.coordinateLabel = SKLabelNode(text: "")
-        self.coordinateLabel.horizontalAlignmentMode = .left
-        self.coordinateLabel.fontSize = 15
-        self.coordinateLabel.fontColor = .black
-        self.coordinateLabel.fontName = "AvenirNext-Bold"
-        self.coordinateLabel.position = CGPoint(x: 20, y: self.size.height - 20)
-        self.addChild(self.coordinateLabel)
         self.addChild(self.joystick)
+
+        if debug {
+            self.coordinateLabel = SKLabelNode(text: "")
+            self.coordinateLabel.horizontalAlignmentMode = .left
+            self.coordinateLabel.fontSize = 15
+            self.coordinateLabel.fontColor = .black
+            self.coordinateLabel.fontName = "AvenirNext-Bold"
+            self.coordinateLabel.position = CGPoint(x: 20, y: self.size.height - 20)
+            self.addChild(self.coordinateLabel)
+        }
         
         if debug {
             let inputCircle = SKShapeNode(circleOfRadius: Circle(at: CGPoint(x: 0, y: size.height), with: size.width / 2).radius)
@@ -73,7 +72,9 @@ class HUD : SKScene {
     }
     
     fileprivate func updateCoordinates(_ touches : Set<UITouch>) {
-        self.coordinateLabel.text =  "Coordinates - current: x=\(Int((touches.first?.location(in: self.joystick).x)!)) · y=\(Int((touches.first?.location(in: self.joystick).y)!)) - previous: x=\(Int((touches.first?.previousLocation(in: self).x)!)) · y=\(Int((touches.first?.previousLocation(in: self).y)!))"
+        if debug {
+            self.coordinateLabel.text =  "Coordinates - current: x=\(Int((touches.first?.location(in: self.joystick).x)!)) · y=\(Int((touches.first?.location(in: self.joystick).y)!)) - previous: x=\(Int((touches.first?.previousLocation(in: self).x)!)) · y=\(Int((touches.first?.previousLocation(in: self).y)!))"
+        }
     }
 }
 
@@ -114,8 +115,7 @@ class Joystick : SKNode {
     }
     
     func onTouchesBegan(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
-        guard let myTouch = fetchSelfTouch(touches, state: "began", for: scene) else {return}
-        print("GO")
+        guard let myTouch = fetchSelfTouch(touches, for: scene) else {return}
 
         self.beganTime = myTouch.timestamp
         self.beganPosition = self.position
@@ -130,37 +130,17 @@ class Joystick : SKNode {
         return start + diff
     }
     
-    private func fetchSelfTouch(_ touches: Set<UITouch>, state: String, for scene : SKScene) -> UITouch! {
+    private func fetchSelfTouch(_ touches: Set<UITouch>, for scene : SKScene) -> UITouch! {
         for touch in touches {
-            if debug {
-                print("\(state) - my location: \(self.position)")
-                print("\(state) - my inner location: \(self.joystickInner.position)")
-                print("\(state) - location nil: \(touch.location(in: nil))")
-                print("\(state) - location scene: \(touch.location(in: scene))")
-                print("\(state) - location self: \(touch.location(in: self))")
-                print("\(state) - previus location nil: \(touch.previousLocation(in: nil))")
-                print("\(state) - previus location scene: \(touch.previousLocation(in: scene))")
-                print("\(state) - previus location self: \(touch.previousLocation(in: self))")
-                print("\(state) - radius: \(touch.majorRadius)")
-                print("\(state) - radius tolerance: \(touch.majorRadiusTolerance)")
-                print("\(state) - tap count: \(touch.tapCount)")
-                print("\(state) - timestamp: \(touch.timestamp)")
-                print("-----")
-            }
             if isPositionIn(circle : self.firstInputCircle, withPosition: touch.location(in: scene)) {
-                print("\(state) - return touch")
                 return touch
             }
         }
-        print("\(state) - return nil")
         return nil
     }
     
     func onTouchesMoved(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
-        guard let myTouch = fetchSelfTouch(touches, state: "moved", for: scene) else {return}
-        
-        print("Has moved - self location: \(myTouch.location(in: scene))")
-        print("Has moved - from position: \(self.position)")
+        guard let myTouch = fetchSelfTouch(touches, for: scene) else {return}
     }
     
     func onTouchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
@@ -184,13 +164,6 @@ class Joystick : SKNode {
         yOf *= yOf
         
         let length = sqrt(xOf + yOf)
-        if debug {
-            print("isIn - withPosition \(position)")
-            print("isIn - ofCenter \(circle.position)")
-            print("isIn - andRadius \(circle.radius)")
-            print("isIn - length \(length)")
-            print("isIn: \(length < circle.radius)")
-        }
         return length < circle.radius
     }
 
