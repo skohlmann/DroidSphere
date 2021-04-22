@@ -40,7 +40,7 @@ class GameViewController: UIViewController {
         self.scnScene = SCNScene(named: "Droid.scnassets/Scenes/Game.scn")
         self.scnView.scene = self.scnScene
     }
-    
+
     func setupNodes() {
         self.cameraNode = self.scnScene.rootNode.childNode(withName: "OrthogonalCamera", recursively: true)
         self.box = self.scnScene.rootNode.childNode(withName: "Box", recursively: true)
@@ -49,7 +49,7 @@ class GameViewController: UIViewController {
     func setupSounds() {
 
     }
-        
+
     override var shouldAutorotate: Bool {
         return true
     }
