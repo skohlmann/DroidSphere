@@ -34,6 +34,7 @@ class HUD : SKScene {
             self.coordinateLabel.fontColor = .black
             self.coordinateLabel.fontName = "AvenirNext-Bold"
             self.coordinateLabel.position = CGPoint(x: 20, y: self.size.height - 20)
+            self.name = "coordinate label"
             self.addChild(self.coordinateLabel)
         }
         
@@ -43,6 +44,7 @@ class HUD : SKScene {
             inputCircle.strokeColor = .lightGray
             inputCircle.position.x = Circle(at: CGPoint(x: 0, y: 0), with: size.width / 2).position.x
             inputCircle.position.y = Circle(at: CGPoint(x: 0, y: 0), with: size.width / 2).position.y
+            inputCircle.name = "input bound"
             self.addChild(inputCircle)
         }
     }
@@ -92,11 +94,12 @@ class Joystick : SKNode {
     var joystickOuter : SKShapeNode!
     
     var beganPosition : CGPoint!
-    var beganTime : TimeInterval!
+    var beganTime : Int64
     var moveStarted = false
     var distanceTolerance : CGFloat!
 
     init(name : String = "Joystick", firstInputIn : Circle) {
+        self.beganTime = Date().millisecondsSince1970
         self.joystickInner = SKShapeNode(circleOfRadius: 20)
         self.joystickInner.fillColor = .red
         self.joystickInner.strokeColor = .orange
@@ -117,15 +120,22 @@ class Joystick : SKNode {
     func onTouchesBegan(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
         guard let myTouch = fetchSelfTouch(touches, for: scene) else {return}
 
-        self.beganTime = myTouch.timestamp
-        self.beganPosition = self.position
-        self.joystickInner.glowWidth = 1.0
-        self.joystickOuter.glowWidth = 2.0
-        self.distanceTolerance = myTouch.majorRadiusTolerance > self.joystickMininumMoveDistance ? myTouch.majorRadiusTolerance : self.joystickMininumMoveDistance
-
-        self.position = calculateNewPosition(start: self.position, withDifference: myTouch.location(in: self))
+        self.beganTime = Date().millisecondsSince1970
+        Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(longPress(timer:)), userInfo: (beganTime: self.beganTime, event: myTouch), repeats: false)
     }
     
+    @objc func longPress(timer : Timer) {
+        guard let eventData = timer.userInfo as? (beganTime: Int64, event: UITouch) else {fatalError("long press value not of type (beganTime: Int64, event: UITouch)")}
+        if eventData.beganTime == self.beganTime {
+            self.beganPosition = self.position
+            self.joystickInner.glowWidth = 1.0
+            self.joystickOuter.glowWidth = 2.0
+            self.distanceTolerance = eventData.event.majorRadiusTolerance > self.joystickMininumMoveDistance ? eventData.event.majorRadiusTolerance : self.joystickMininumMoveDistance
+
+            self.position = calculateNewPosition(start: self.position, withDifference: eventData.event.location(in: self))
+        }
+    }
+
     @inline(__always) private func calculateNewPosition(start : CGPoint, withDifference diff : CGPoint) -> CGPoint {
         return start + diff
     }
@@ -150,10 +160,10 @@ class Joystick : SKNode {
         self.joystickInner.glowWidth = 0
         self.joystickOuter.glowWidth = 0
         self.moveStarted = false
+        self.beganTime = Date().millisecondsSince1970
         if self.beganPosition != nil {
             self.position = self.beganPosition
             self.beganPosition = nil
-            self.beganTime = nil
         }
     }
     
@@ -200,5 +210,16 @@ fileprivate extension CGPoint {
     
     @inline(__always) static func -(lhs: CGPoint, rhs:CGPoint) -> CGPoint {
         return CGPoint(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
+    }
+}
+
+
+fileprivate extension Date {
+    var millisecondsSince1970:Int64 {
+        return Int64((self.timeIntervalSince1970 * 1000.0).rounded())
+    }
+
+    init(milliseconds:Int64) {
+        self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
     }
 }
