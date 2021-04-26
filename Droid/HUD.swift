@@ -155,8 +155,9 @@ class Joystick : SKNode {
     
     func onTouchesMoved(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
         guard let myTouch = fetchMyTouch(touches, for: scene) else {return}
-        let myPosition = myTouch.location(in: scene)
-        let distanceAndAngle = distanceAndAngleBetween(self.position, myPosition)
+        let myScenePosition = myTouch.location(in: scene)
+        let distanceAndAngle = distanceAndAngleBetween(self.position, myScenePosition)
+        print("distance and angle: \(distanceAndAngle)")
         
         if !self.motionActive {
             if distanceAndAngle.distance >= self.distanceTolerance {
@@ -166,13 +167,12 @@ class Joystick : SKNode {
         
         if self.motionActive {
             if distanceAndAngle.distance > self.joystickMaxMoveBounds {
-                let directionVector = myPosition - self.position
+                let directionVector = myScenePosition - self.position
                 let shiftFactor = 1 - self.joystickMaxMoveBounds / distanceAndAngle.distance
                 let shiftVector = directionVector * shiftFactor
                 self.position += shiftVector
-            } else {
-                self.joystickInner.position = myTouch.location(in: self)
             }
+            self.joystickInner.position = myTouch.location(in: self)
         }
     }
     
@@ -230,7 +230,7 @@ class Joystick : SKNode {
 
     func distanceAndAngleBetween(_ from : CGPoint, _ to : CGPoint) -> (distance: CGFloat, velocity : CGFloat, radians : CGFloat) {
         let dist = from.distance(to: to)
-        let velocity = map(dist, vallow: 0, valhi: dist, tarlow: 0, tarhi: 1)
+        let velocity = map(dist < self.joystickMaxMoveBounds ? dist : self.joystickMaxMoveBounds, vallow: 0, valhi: self.joystickMaxMoveBounds, tarlow: 0, tarhi: 1)
         let angle = from.angle(to)
         return (distance: dist, velocity: velocity, radians: angle)
     }
