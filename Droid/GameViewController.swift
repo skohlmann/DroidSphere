@@ -11,22 +11,60 @@ import SpriteKit
 
 class GameViewController: UIViewController {
     
+    let tappedName = Notification.Name("button1 tapped")
+    let movedName = Notification.Name("stick1 moved")
+    let moveStoppedName = Notification.Name("stick1 move stopped")
+
     var scnView : SCNView!
     var scnScene : SCNScene!
     
     var cameraNode : SCNNode!
     var box : SCNNode!
+    var boxRotating = false
     
     var overlayScene : HUD!
     var coordinateLabel : SKLabelNode!
 
     var spawnTime : TimeInterval = 0
+    
+    var tappedObserver : NSObjectProtocol!
+    var movedObserver : NSObjectProtocol!
+    var moveStoppedObserver : NSObjectProtocol!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupScene()
         setupNodes()
         setupSounds()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if self.tappedObserver != nil {
+            NotificationCenter.default.removeObserver(self.tappedObserver!)
+        }
+        if self.movedObserver != nil {
+            NotificationCenter.default.removeObserver(self.movedObserver!)
+        }
+        if self.moveStoppedObserver != nil {
+            NotificationCenter.default.removeObserver(self.moveStoppedObserver!)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.tappedObserver = NotificationCenter.default.addObserver(forName: self.tappedName, object: nil, queue: nil) { notification in
+            if self.box != nil && !self.boxRotating {
+                let action = SCNAction.rotateBy(x: 0, y: 2.0, z: 2.0, duration: 1)
+                self.box.runAction(SCNAction.repeatForever(action), forKey: "rotate")
+                self.boxRotating = true
+            } else if self.box != nil && self.boxRotating {
+                self.box.removeAction(forKey: "rotate")
+                self.boxRotating = false
+            }
+        }
+        self.movedObserver = NotificationCenter.default.addObserver(forName: self.movedName, object: nil, queue: nil) { notification in
+        }
+        self.moveStoppedObserver = NotificationCenter.default.addObserver(forName: self.moveStoppedName, object: nil, queue: nil) { notification in
+        }
     }
 
     func setupScene() {
@@ -49,6 +87,7 @@ class GameViewController: UIViewController {
     func setupSounds() {
 
     }
+    
 
     override var shouldAutorotate: Bool {
         return true

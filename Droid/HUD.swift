@@ -15,7 +15,7 @@ class HUD : SKScene {
     
     var coordinateLabel : SKLabelNode!
     var overView : GameViewController
-    var joystick : Joystick
+    let joystick : Joystick
 
     init(size: CGSize, scene : GameViewController) {
         
@@ -23,11 +23,10 @@ class HUD : SKScene {
         self.joystick = Joystick(name: "left joystick", firstInputIn: Circle(at: CGPoint(x: 0, y: 0), with: size.width / 2))
         self.joystick.position.x = 100
         self.joystick.position.y = 140
-        
-        self.joystick.tapAt = {point in
-            print("Tap Point: \(point)")
-        }
-        
+        self.joystick.tapped = scene.tappedName
+        self.joystick.moved = scene.movedName
+        self.joystick.moveStopped = scene.moveStoppedName
+
         super.init(size: size)
 
         self.addChild(self.joystick)
@@ -104,9 +103,10 @@ class Joystick : SKNode {
     var moveStarted = false
     var distanceTolerance : CGFloat!
     
-    var tapAt : ((_ tapPoint : CGPoint) -> ())!
-    var moveTo : ((_ velocity : CGFloat, _ direction : CGFloat) -> ())!
-
+    var tapped : Notification.Name!
+    var moved : Notification.Name!
+    var moveStopped : Notification.Name!
+    
     init(name : String = "Joystick", firstInputIn : Circle) {
         self.beganTime = Date().millisecondsSince1970
         self.joystickInner = SKShapeNode(circleOfRadius: 20)
@@ -140,7 +140,9 @@ class Joystick : SKNode {
     @objc func longPress(timer : Timer) {
         guard let eventData = timer.userInfo as? (beganTime: Int64, event: UITouch) else {fatalError("long press value not of type (beganTime: Int64, event: UITouch)")}
         if eventData.beganTime == self.beganTime {
-            self.beganPosition = self.position
+            if self.beganPosition == nil {
+                self.beganPosition = self.position
+            }
             self.longPress = true
             self.joystickInner.glowWidth = 1.0
             self.joystickOuter.glowWidth = 2.0
@@ -153,26 +155,32 @@ class Joystick : SKNode {
         return start + diff
     }
     
-    func onTouchesMoved(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
-        guard let myTouch = fetchMyTouch(touches, for: scene) else {return}
-        let myScenePosition = myTouch.location(in: scene)
-        let distanceAndAngle = distanceAndAngleBetween(self.position, myScenePosition)
-        print("distance and angle: \(distanceAndAngle)")
-        
+    fileprivate func firstMoveEffective(_ distance: CGFloat) {
         if !self.motionActive {
-            if distanceAndAngle.distance >= self.distanceTolerance {
+            if distance >= self.distanceTolerance {
                 self.motionActive = true
             }
         }
+    }
+    
+    func onTouchesMoved(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
+        guard let myTouch = fetchMyTouch(touches, for: scene) else {return}
+        let myScenePosition = myTouch.location(in: scene)
+        let distance = self.position.distance(to: myScenePosition)
+        
+        firstMoveEffective(distance)
         
         if self.motionActive {
-            if distanceAndAngle.distance > self.joystickMaxMoveBounds {
-                let directionVector = myScenePosition - self.position
-                let shiftFactor = 1 - self.joystickMaxMoveBounds / distanceAndAngle.distance
+            let directionVector = myScenePosition - self.position
+            if distance > self.joystickMaxMoveBounds {
+                let shiftFactor = 1 - self.joystickMaxMoveBounds / distance
                 let shiftVector = directionVector * shiftFactor
                 self.position += shiftVector
             }
             self.joystickInner.position = myTouch.location(in: self)
+            if self.moved != nil {
+                NotificationCenter.default.post(name: self.moved, object: directionVector.normalized)
+            }
         }
     }
     
@@ -183,8 +191,8 @@ class Joystick : SKNode {
     func onTouchesEnded(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
         guard let myTouch = fetchMyTouch(touches, for: scene) else {return}
         self.beganTime = Date().millisecondsSince1970
-        if !longPress && self.tapAt != nil {
-            tapAt(myTouch.location(in: scene))
+        if !longPress && self.tapped != nil {
+            NotificationCenter.default.post(name: self.tapped, object: myTouch.location(in: scene))
         }
 
         if self.longPress {
@@ -195,7 +203,9 @@ class Joystick : SKNode {
             if self.beganPosition != nil {
                 self.position = self.beganPosition
                 self.joystickInner.position = CGPoint(x: 0, y: 0)
-                self.beganPosition = nil
+            }
+            if self.moveStopped != nil {
+                NotificationCenter.default.post(name: self.moveStopped, object: myTouch.location(in: scene))
             }
         }
         self.longPress = false
@@ -215,7 +225,7 @@ class Joystick : SKNode {
     }
     
     @inline(__always) private func isAround(location: CGPoint, withPosition position : CGPoint) -> Bool {
-        let place = Circle(at: location, with: 40)
+        let place = Circle(at: location, with: 80)
         return isPositionIn(circle: place, withPosition: position)
     }
     
@@ -226,13 +236,6 @@ class Joystick : SKNode {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func distanceAndAngleBetween(_ from : CGPoint, _ to : CGPoint) -> (distance: CGFloat, velocity : CGFloat, radians : CGFloat) {
-        let dist = from.distance(to: to)
-        let velocity = map(dist < self.joystickMaxMoveBounds ? dist : self.joystickMaxMoveBounds, vallow: 0, valhi: self.joystickMaxMoveBounds, tarlow: 0, tarhi: 1)
-        let angle = from.angle(to)
-        return (distance: dist, velocity: velocity, radians: angle)
     }
 }
 
