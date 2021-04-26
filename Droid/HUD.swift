@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 import SceneKit
 
-let debug = true
+let debug = false
 
 class HUD : SKScene {
     
@@ -110,13 +110,13 @@ class Joystick : SKNode {
     init(name : String = "Joystick", firstInputIn : Circle) {
         self.beganTime = Date().millisecondsSince1970
         self.joystickInner = SKShapeNode(circleOfRadius: 20)
-        self.joystickInner.fillColor = .red
-        self.joystickInner.strokeColor = .orange
+        self.joystickInner.fillColor = .white
+        self.joystickInner.strokeColor = .lightGray
         self.joystickInner.alpha = 20
 
         self.joystickOuter = SKShapeNode(circleOfRadius: 20 + joystickMaxMove)
         self.joystickOuter.fillColor = .clear
-        self.joystickOuter.strokeColor = .red
+        self.joystickOuter.strokeColor = .white
         
         self.firstInputCircle = firstInputIn
 
@@ -128,6 +128,9 @@ class Joystick : SKNode {
     
     func onTouchesBegan(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
         guard let myTouch = fetchMyTouch(touches, for: scene) else {return}
+        if self.beganPosition == nil {
+            self.beganPosition = self.position
+        }
         self.distanceTolerance = myTouch.majorRadiusTolerance > self.joystickMininumMoveDistance ? myTouch.majorRadiusTolerance : self.joystickMininumMoveDistance
         self.beganTime = Date().millisecondsSince1970
         initLongTouchTimer(myTouch)
@@ -140,9 +143,6 @@ class Joystick : SKNode {
     @objc func longPress(timer : Timer) {
         guard let eventData = timer.userInfo as? (beganTime: Int64, event: UITouch) else {fatalError("long press value not of type (beganTime: Int64, event: UITouch)")}
         if eventData.beganTime == self.beganTime {
-            if self.beganPosition == nil {
-                self.beganPosition = self.position
-            }
             self.longPress = true
             self.joystickInner.glowWidth = 1.0
             self.joystickOuter.glowWidth = 2.0
