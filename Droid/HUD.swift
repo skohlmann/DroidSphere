@@ -90,6 +90,7 @@ class Joystick : SKNode {
     let firstInputCircle : Circle
     
     let joystickMaxMove = CGFloat(30)
+    let joystickMaxMoveBounds = CGFloat(30) - 4
     let joystickMininumMoveDistance : CGFloat = 2
 
     var motionActive = false
@@ -126,8 +127,13 @@ class Joystick : SKNode {
     }
     
     func onTouchesBegan(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
-        guard let myTouch = fetchSelfTouch(touches, for: scene) else {return}
+        guard let myTouch = fetchMyTouch(touches, for: scene) else {return}
+        self.distanceTolerance = myTouch.majorRadiusTolerance > self.joystickMininumMoveDistance ? myTouch.majorRadiusTolerance : self.joystickMininumMoveDistance
         self.beganTime = Date().millisecondsSince1970
+        initLongTouchTimer(myTouch)
+    }
+
+    fileprivate func initLongTouchTimer(_ myTouch: UITouch) {
         Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(longPress(timer:)), userInfo: (beganTime: self.beganTime, event: myTouch), repeats: false)
     }
     
@@ -138,7 +144,6 @@ class Joystick : SKNode {
             self.longPress = true
             self.joystickInner.glowWidth = 1.0
             self.joystickOuter.glowWidth = 2.0
-            self.distanceTolerance = eventData.event.majorRadiusTolerance > self.joystickMininumMoveDistance ? eventData.event.majorRadiusTolerance : self.joystickMininumMoveDistance
 
             self.position = calculateNewPosition(start: self.position, withDifference: eventData.event.location(in: self))
         }
@@ -149,44 +154,58 @@ class Joystick : SKNode {
     }
     
     func onTouchesMoved(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
-        print("moved")
-        guard let myTouch = fetchSelfTouch(touches, for: scene) else {return}
-        let distance = self.position.distance(to: myTouch.location(in: scene))
+        guard let myTouch = fetchMyTouch(touches, for: scene) else {return}
+        let myPosition = myTouch.location(in: scene)
+        let distanceAndAngle = distanceAndAngleBetween(self.position, myPosition)
+        
         if !self.motionActive {
-            if distance >= self.distanceTolerance {
+            if distanceAndAngle.distance >= self.distanceTolerance {
                 self.motionActive = true
             }
         }
         
-        print("moved from \(self.position) to \(myTouch.location(in: scene))")
-        
+        if self.motionActive {
+            if distanceAndAngle.distance > self.joystickMaxMoveBounds {
+                let boundsOvergo = distanceAndAngle.distance - self.joystickMaxMoveBounds
+                print("boundsOvergo: \(boundsOvergo)")
+                let vX = cos(distanceAndAngle.radians)
+                let vY = sin(distanceAndAngle.radians)
+                print("Old self position: \(self.position) - new self position: \(self.position + CGPoint(x: vX * boundsOvergo, y: vY * boundsOvergo) )")
+                self.position = self.position + CGPoint(x: vX * boundsOvergo, y: vY * boundsOvergo)
+            } else {
+                self.joystickInner.position = myTouch.location(in: self)
+            }
+        }
     }
     
     func onTouchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
-        guard let myTouch = fetchSelfTouch(touches, for: scene) else {return}
+        guard let myTouch = fetchMyTouch(touches, for: scene) else {return}
         print("cancelled")
     }
     
     func onTouchesEnded(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
-        print("ended")
-        guard let myTouch = fetchSelfTouch(touches, for: scene) else {return}
+        guard let myTouch = fetchMyTouch(touches, for: scene) else {return}
+        self.beganTime = Date().millisecondsSince1970
         if !longPress && self.tapAt != nil {
             tapAt(myTouch.location(in: scene))
         }
 
-        self.longPress = false
-        self.joystickInner.glowWidth = 0
-        self.joystickOuter.glowWidth = 0
-        self.moveStarted = false
-        self.motionActive = false
-        self.beganTime = Date().millisecondsSince1970
-        if self.beganPosition != nil {
-            self.position = self.beganPosition
-            self.beganPosition = nil
+        if self.longPress {
+            self.joystickInner.glowWidth = 0
+            self.joystickOuter.glowWidth = 0
+            self.moveStarted = false
+            self.motionActive = false
+            if self.beganPosition != nil {
+                self.position = self.beganPosition
+                self.joystickInner.position = CGPoint(x: 0, y: 0)
+                self.beganPosition = nil
+            }
         }
+        self.longPress = false
+        print("Ended - self.position: \(self.position)")
     }
     
-    private func fetchSelfTouch(_ touches: Set<UITouch>, for scene : SKScene) -> UITouch! {
+    private func fetchMyTouch(_ touches: Set<UITouch>, for scene : SKScene) -> UITouch! {
         for touch in touches {
             let location = touch.location(in: scene)
             if !self.longPress && isPositionIn(circle : self.firstInputCircle, withPosition: location) {
@@ -209,21 +228,15 @@ class Joystick : SKNode {
         return length < circle.radius
     }
     
-    @inline(__always) private func distanceBetween(_ p1: CGPoint, _ p2: CGPoint) -> CGFloat {
-        var xOf = p1.x - p2.x
-        xOf *= xOf
-        var yOf = p1.y - p2.y
-        yOf *= yOf
-        
-        return sqrt(xOf + yOf)
-    }
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func distanceBetweenAndAngle(start : CGPoint, target : CGPoint) -> (length : CGFloat, angle : CGFloat)! {
-        return nil
+    func distanceAndAngleBetween(_ from : CGPoint, _ to : CGPoint) -> (distance: CGFloat, velocity : CGFloat, radians : CGFloat) {
+        let dist = from.distance(to: to)
+        let velocity = map(dist, vallow: 0, valhi: dist, tarlow: 0, tarhi: 1)
+        let angle = from.angle(to)
+        return (distance: dist, velocity: velocity, radians: angle)
     }
 }
 
@@ -295,13 +308,9 @@ fileprivate extension CGPoint {
     }
     
     @inline(__always) func angle(_ other: CGPoint) -> CGFloat {
-        let angle = degrees(atan2(other.x - self.x, other.y - self.y))
-        if angle < 0 {
-            return radians(360 + angle)
-        }
-        return radians(angle)
+        return atan2(other.x - self.x, other.y - self.y)
     }
-    
+
     @inline(__always) func dot(_ other: CGPoint) -> CGFloat {
         return self.x * other.x + self.y * other.y
     }
@@ -327,4 +336,10 @@ fileprivate extension Date {
     init(milliseconds:Int64) {
         self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
     }
+}
+
+
+@inline(__always) func map(_ value : CGFloat, vallow : CGFloat = 0, valhi : CGFloat = 1, tarlow : CGFloat = 0, tarhi : CGFloat) -> CGFloat {
+    assert(value >= vallow && value <= valhi, "value (\(value) not in range \(vallow) - \(valhi)")
+    return tarlow + (tarhi - tarlow) * ((value - vallow) / (valhi - vallow))
 }
