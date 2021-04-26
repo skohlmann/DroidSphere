@@ -171,7 +171,7 @@ class Joystick : SKNode {
         firstMoveEffective(distance)
         
         if self.motionActive {
-            let directionVector = myScenePosition - self.position
+            let directionVector = self.position.direction(to: myScenePosition)
             if distance > self.joystickMaxMoveBounds {
                 let shiftFactor = 1 - self.joystickMaxMoveBounds / distance
                 let shiftVector = directionVector * shiftFactor
@@ -179,7 +179,10 @@ class Joystick : SKNode {
             }
             self.joystickInner.position = myTouch.location(in: self)
             if self.moved != nil {
-                NotificationCenter.default.post(name: self.moved, object: directionVector.normalized)
+                let velocity = map(distance <= self.joystickMaxMoveBounds ? distance : self.joystickMaxMoveBounds, vallow: 0, valhi: self.joystickMaxMoveBounds, tarlow: 0, tarhi: 1)
+                let normalized = directionVector.normalized
+                let vector = CGVector(dx: normalized.x, dy: normalized.y)
+                NotificationCenter.default.post(name: self.moved, object: Direction(direction: vector, velocity: velocity))
             }
         }
     }
@@ -249,84 +252,6 @@ struct Circle {
     }
 }
 
-fileprivate extension CGPoint {
-    
-    @inline(__always) static func +=(lhs:inout CGPoint, rhs:CGPoint) {
-        lhs.x = lhs.x + rhs.x
-        lhs.y = lhs.y + rhs.y
-    }
-    
-    @inline(__always) static func +(lhs: CGPoint, rhs:CGPoint) -> CGPoint {
-        return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
-    }
-
-    @inline(__always) static func -=(lhs:inout CGPoint, rhs:CGPoint) {
-        lhs.x = lhs.x - rhs.x
-        lhs.y = lhs.y - rhs.y
-    }
-    
-    @inline(__always) static func -(lhs: CGPoint, rhs:CGPoint) -> CGPoint {
-        return CGPoint(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
-    }
-
-    @inline(__always) static func *(lhs : CGPoint, rhs : CGFloat) -> CGPoint {
-        return CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
-    }
-
-    @inline(__always) static func *=(lhs:inout CGPoint, rhs : CGFloat) -> CGPoint {
-        return CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
-    }
-
-    @inline(__always) static func *=(lhs : CGFloat, rhs:inout CGPoint) -> CGPoint {
-        return rhs * lhs
-    }
-
-    @inline(__always) static func /(lhs : CGPoint, rhs : CGFloat) -> CGPoint {
-        return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
-    }
-
-    @inline(__always) static func /=(lhs:inout CGPoint, rhs : CGFloat) -> CGPoint {
-        return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
-    }
-
-    @inline(__always) static func /=(lhs : CGFloat, rhs:inout CGPoint) -> CGPoint {
-        return rhs / lhs
-    }
-
-    var magnitude : CGFloat {
-        get {
-            return sqrt(self.x * self.x + self.y * self.y)
-        }
-    }
-
-    var normalized : CGPoint {
-        get {
-            let mag = magnitude
-            return CGPoint(x: self.x / mag, y: self.y / mag)
-        }
-    }
-    
-    @inline(__always) func angle(_ other: CGPoint) -> CGFloat {
-        return atan2(other.x - self.x, other.y - self.y)
-    }
-
-    @inline(__always) func dot(_ other: CGPoint) -> CGFloat {
-        return self.x * other.x + self.y * other.y
-    }
-
-    @inline(__always) func distance(to other: CGPoint) -> CGFloat {
-        var xOf = self.x - other.x
-        xOf *= xOf
-        var yOf = self.y - other.y
-        yOf *= yOf
-        
-        return sqrt(xOf + yOf)
-    }
-    
-    
-}
-
-
 fileprivate extension Date {
     var millisecondsSince1970:Int64 {
         return Int64((self.timeIntervalSince1970 * 1000.0).rounded())
@@ -335,10 +260,4 @@ fileprivate extension Date {
     init(milliseconds:Int64) {
         self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
     }
-}
-
-
-@inline(__always) func map(_ value : CGFloat, vallow : CGFloat = 0, valhi : CGFloat = 1, tarlow : CGFloat = 0, tarhi : CGFloat) -> CGFloat {
-    assert(value >= vallow && value <= valhi, "value (\(value) not in range \(vallow) - \(valhi)")
-    return tarlow + (tarhi - tarlow) * ((value - vallow) / (valhi - vallow))
 }

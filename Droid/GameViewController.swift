@@ -62,6 +62,10 @@ class GameViewController: UIViewController {
             }
         }
         self.movedObserver = NotificationCenter.default.addObserver(forName: self.movedName, object: nil, queue: nil) { notification in
+            if self.box != nil {
+                guard let direction = notification.object as? Direction else {fatalError("move notification not CGVector")}
+                print("direction: \(direction)")
+            }
         }
         self.moveStoppedObserver = NotificationCenter.default.addObserver(forName: self.moveStoppedName, object: nil, queue: nil) { notification in
         }

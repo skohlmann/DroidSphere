@@ -34,3 +34,23 @@ let deg_to_rad : Double = .pi / 180.0
     return radians * CGFloat(rad_to_deg)
 }
 
+extension CGPoint {
+    
+    func rotate(radians: CGFloat) -> CGPoint {
+        return CGPoint(x: self.x * cos(radians) - self.y * sin(radians), y: self.x * sin(radians) + self.y * cos(radians))
+    }
+
+    func rotate(degrees: CGFloat) -> CGPoint {
+        return rotate(radians: radians(degrees))
+    }
+}
+
+extension CGVector {
+    
+    func rotate(radians: CGFloat) -> CGVector {
+        return CGVector(dx: self.dx * cos(radians) - self.dy * sin(radians), dy: self.dx * sin(radians) + self.dy * cos(radians))
+    }
+    func rotate(degrees: CGFloat) -> CGVector {
+        return rotate(radians: radians(degrees))
+    }
+}
