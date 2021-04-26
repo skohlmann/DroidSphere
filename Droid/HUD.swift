@@ -166,12 +166,10 @@ class Joystick : SKNode {
         
         if self.motionActive {
             if distanceAndAngle.distance > self.joystickMaxMoveBounds {
-                let boundsOvergo = distanceAndAngle.distance - self.joystickMaxMoveBounds
-                print("boundsOvergo: \(boundsOvergo)")
-                let vX = cos(distanceAndAngle.radians)
-                let vY = sin(distanceAndAngle.radians)
-                print("Old self position: \(self.position) - new self position: \(self.position + CGPoint(x: vX * boundsOvergo, y: vY * boundsOvergo) )")
-                self.position = self.position + CGPoint(x: vX * boundsOvergo, y: vY * boundsOvergo)
+                let directionVector = myPosition - self.position
+                let shiftFactor = 1 - self.joystickMaxMoveBounds / distanceAndAngle.distance
+                let shiftVector = directionVector * shiftFactor
+                self.position += shiftVector
             } else {
                 self.joystickInner.position = myTouch.location(in: self)
             }
@@ -180,7 +178,6 @@ class Joystick : SKNode {
     
     func onTouchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
         guard let myTouch = fetchMyTouch(touches, for: scene) else {return}
-        print("cancelled")
     }
     
     func onTouchesEnded(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
@@ -202,7 +199,6 @@ class Joystick : SKNode {
             }
         }
         self.longPress = false
-        print("Ended - self.position: \(self.position)")
     }
     
     private func fetchMyTouch(_ touches: Set<UITouch>, for scene : SKScene) -> UITouch! {
