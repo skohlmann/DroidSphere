@@ -64,17 +64,19 @@ class GameViewController: UIViewController {
         self.movedObserver = NotificationCenter.default.addObserver(forName: self.movedName, object: nil, queue: nil) { notification in
             if self.box != nil {
                 guard let direction = notification.object as? Direction else {fatalError("move notification not of type Direction")}
-                var directionVector = direction.direction.rotate(degrees: -45)
-                let velocity = map(direction.velocity, tarlow: 20, tarhi: 60)
-                directionVector = directionVector * velocity
-                let move = SCNAction.moveBy(x: directionVector.dx, y: 0, z: directionVector.dy, duration: TimeInterval(velocity))
-                self.box.removeAction(forKey: "move")
-                self.box.runAction(SCNAction.repeatForever(move), forKey: "move")
+                let directionVector = direction.direction.rotate(degrees: -45)
+                let velocity = map(direction.velocity, tarlow: 4, tarhi: 10)
+                let velocityVector = directionVector * velocity
+                let moveBox = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: velocityVector.dy, duration: 1.2)
+                self.box.runAction(SCNAction.repeatForever(moveBox), forKey: "move")
+                self.cameraNode.runAction(SCNAction.repeatForever(moveBox), forKey: "move")
+
             }
         }
         self.moveStoppedObserver = NotificationCenter.default.addObserver(forName: self.moveStoppedName, object: nil, queue: nil) { notification in
             if self.box != nil {
                 self.box.removeAction(forKey: "move")
+                self.cameraNode.removeAction(forKey: "move")
             }
         }
     }
@@ -94,8 +96,6 @@ class GameViewController: UIViewController {
     func setupNodes() {
         self.cameraNode = self.scnScene.rootNode.childNode(withName: "OrthogonalCamera", recursively: true)
         self.box = self.scnScene.rootNode.childNode(withName: "Box", recursively: true)
-        let followConstraints = SCNLookAtConstraint(target: self.box)
-        self.cameraNode.constraints = [followConstraints]
     }
     
     func setupSounds() {
