@@ -63,11 +63,19 @@ class GameViewController: UIViewController {
         }
         self.movedObserver = NotificationCenter.default.addObserver(forName: self.movedName, object: nil, queue: nil) { notification in
             if self.box != nil {
-                guard let direction = notification.object as? Direction else {fatalError("move notification not CGVector")}
-                print("direction: \(direction)")
+                guard let direction = notification.object as? Direction else {fatalError("move notification not of type Direction")}
+                var directionVector = direction.direction.rotate(degrees: -45)
+                let velocity = map(direction.velocity, tarlow: 20, tarhi: 60)
+                directionVector = directionVector * velocity
+                let move = SCNAction.moveBy(x: directionVector.dx, y: 0, z: directionVector.dy, duration: TimeInterval(velocity))
+                self.box.removeAction(forKey: "move")
+                self.box.runAction(SCNAction.repeatForever(move), forKey: "move")
             }
         }
         self.moveStoppedObserver = NotificationCenter.default.addObserver(forName: self.moveStoppedName, object: nil, queue: nil) { notification in
+            if self.box != nil {
+                self.box.removeAction(forKey: "move")
+            }
         }
     }
 
@@ -86,6 +94,8 @@ class GameViewController: UIViewController {
     func setupNodes() {
         self.cameraNode = self.scnScene.rootNode.childNode(withName: "OrthogonalCamera", recursively: true)
         self.box = self.scnScene.rootNode.childNode(withName: "Box", recursively: true)
+        let followConstraints = SCNLookAtConstraint(target: self.box)
+        self.cameraNode.constraints = [followConstraints]
     }
     
     func setupSounds() {
@@ -104,37 +114,6 @@ class GameViewController: UIViewController {
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .landscape
     }
-    
-    func onTouchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        debugUITouches(touches, caller: "touchesBegan")
-    }
-    
-    func onTouchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        debugUITouches(touches, caller: "touchesMoved")
-    }
-    
-    func onTouchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        debugUITouches(touches, caller: "touchesCancelled")
-    }
-    
-    func onTouchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        debugUITouches(touches, caller: "touchesEnded")
-    }
-    
-    fileprivate func debugUITouches(_ touches: Set<UITouch>, caller: String) {
-        /*
-        var count = 0
-        for touch in touches {
-            print("\(caller) (\(count)) - force: \(touch.force)")
-            print("\(caller) (\(count)) - tapCount: \(touch.tapCount)")
-            print("\(caller) (\(count)) - location: \(touch.location(in: self.scnView))")
-            print("---------")
-            count += 1
-        }
-        print("#########")
- */
-    }
-    
 }
 
 extension GameViewController : SCNSceneRendererDelegate {
