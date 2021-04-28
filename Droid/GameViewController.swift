@@ -30,6 +30,8 @@ class GameViewController: UIViewController {
     var tappedObserver : NSObjectProtocol!
     var movedObserver : NSObjectProtocol!
     var moveStoppedObserver : NSObjectProtocol!
+    var lastMovedMillis = Date().millisecondsSince1970
+    var millisBetweenPossibleMoveChange : Int64 = 50
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,18 +63,25 @@ class GameViewController: UIViewController {
                 self.boxRotating = false
             }
         }
+
         self.movedObserver = NotificationCenter.default.addObserver(forName: self.movedName, object: nil, queue: nil) { notification in
             if self.box != nil {
+                let currentMillis = Date().millisecondsSince1970
+                if currentMillis < self.millisBetweenPossibleMoveChange + self.lastMovedMillis {
+                    return
+                }
+                self.lastMovedMillis = currentMillis
                 guard let direction = notification.object as? Direction else {fatalError("move notification not of type Direction")}
                 let directionVector = direction.direction.rotate(degrees: -45)
-                let velocity = map(direction.velocity, tarlow: 4, tarhi: 10)
+                let velocity = map(direction.velocity, tarlow: 0.05, tarhi: 0.6)
                 let velocityVector = directionVector * velocity
-                let moveBox = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: velocityVector.dy, duration: 1.2)
+                let moveBox = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: velocityVector.dy, duration: 0.05)
                 self.box.runAction(SCNAction.repeatForever(moveBox), forKey: "move")
                 self.cameraNode.runAction(SCNAction.repeatForever(moveBox), forKey: "move")
 
             }
         }
+
         self.moveStoppedObserver = NotificationCenter.default.addObserver(forName: self.moveStoppedName, object: nil, queue: nil) { notification in
             if self.box != nil {
                 self.box.removeAction(forKey: "move")
