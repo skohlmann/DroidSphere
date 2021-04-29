@@ -1,4 +1,3 @@
-# Licenses
+# Textures
 
-
-* https://texturehaven.com/tex/?t=fabric_pattern_05[`fabric_pattern_05*`] by https://texturehaven.com/textures/?a=Rob%20Tuytel[Rob Tuytel] with license https://texturehaven.com/p/license.php[CC0]
+Textures from Jojo.
