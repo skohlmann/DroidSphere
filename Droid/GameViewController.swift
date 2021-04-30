@@ -85,7 +85,7 @@ class GameViewController: UIViewController {
                 let directionVector = direction.direction.rotate(degrees: -45)
                 let velocity = map(direction.velocity, tarlow: 0.03, tarhi: 0.3)
                 let velocityVector = directionVector * velocity
-                let moveBox = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: velocityVector.dy, duration: 0.03)
+                let moveBox = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: -velocityVector.dy, duration: 0.03)
                 self.droid.runAction(SCNAction.repeatForever(moveBox), forKey: "move")
                 self.cameraNode.runAction(SCNAction.repeatForever(moveBox), forKey: "move")
 
@@ -117,6 +117,9 @@ class GameViewController: UIViewController {
     func setupNodes() {
         self.cameraNode = self.scnScene.rootNode.childNode(withName: "OrthogonalCamera", recursively: true)
         self.droid = loadBaseDroid()
+        self.droid.position.x = 0
+        self.droid.position.y = 1
+        self.droid.position.z = 0
         self.scnScene.rootNode.addChildNode(self.droid)
     }
     
