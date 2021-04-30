@@ -28,8 +28,8 @@ class GameViewController: UIViewController {
     var scnScene : SCNScene!
     
     var cameraNode : SCNNode!
-    var box : SCNNode!
-    var boxRotating = false
+    var droid : SCNNode!
+    var droidRotating = false
     
     var overlayScene : HUD!
     var coordinateLabel : SKLabelNode!
@@ -40,7 +40,8 @@ class GameViewController: UIViewController {
     var movedObserver : NSObjectProtocol!
     var moveStoppedObserver : NSObjectProtocol!
     var lastMovedMillis = Date().millisecondsSince1970
-    var millisBetweenPossibleMoveChange : Int64 = 50
+    var millisBetweenPossibleMoveChange : Int64 = 33
+    var lastContactNode : SCNNode!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,18 +64,18 @@ class GameViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.tappedObserver = NotificationCenter.default.addObserver(forName: self.tappedName, object: nil, queue: nil) { notification in
-            if self.box != nil && !self.boxRotating {
+            if self.droid != nil && !self.droidRotating {
                 let action = SCNAction.rotateBy(x: 2.0, y: 0.0, z: 2.0, duration: 1)
-                self.box.runAction(SCNAction.repeatForever(action), forKey: "rotate")
-                self.boxRotating = true
-            } else if self.box != nil && self.boxRotating {
-                self.box.removeAction(forKey: "rotate")
-                self.boxRotating = false
+                self.droid.runAction(SCNAction.repeatForever(action), forKey: "rotate")
+                self.droidRotating = true
+            } else if self.droid != nil && self.droidRotating {
+                self.droid.removeAction(forKey: "rotate")
+                self.droidRotating = false
             }
         }
 
         self.movedObserver = NotificationCenter.default.addObserver(forName: self.movedName, object: nil, queue: nil) { notification in
-            if self.box != nil {
+            if self.droid != nil {
                 let currentMillis = Date().millisecondsSince1970
                 if currentMillis < self.millisBetweenPossibleMoveChange + self.lastMovedMillis {
                     return
@@ -85,15 +86,15 @@ class GameViewController: UIViewController {
                 let velocity = map(direction.velocity, tarlow: 0.03, tarhi: 0.3)
                 let velocityVector = directionVector * velocity
                 let moveBox = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: velocityVector.dy, duration: 0.03)
-                self.box.runAction(SCNAction.repeatForever(moveBox), forKey: "move")
+                self.droid.runAction(SCNAction.repeatForever(moveBox), forKey: "move")
                 self.cameraNode.runAction(SCNAction.repeatForever(moveBox), forKey: "move")
 
             }
         }
 
         self.moveStoppedObserver = NotificationCenter.default.addObserver(forName: self.moveStoppedName, object: nil, queue: nil) { notification in
-            if self.box != nil {
-                self.box.removeAction(forKey: "move")
+            if self.droid != nil {
+                self.droid.removeAction(forKey: "move")
                 self.cameraNode.removeAction(forKey: "move")
             }
         }
@@ -111,13 +112,12 @@ class GameViewController: UIViewController {
         self.scnView.scene = self.scnScene
         self.scnView.antialiasingMode = .none
 
-        let droid = loadBaseDroid()
-        self.scnScene.rootNode.addChildNode(droid)
     }
 
     func setupNodes() {
         self.cameraNode = self.scnScene.rootNode.childNode(withName: "OrthogonalCamera", recursively: true)
-        self.box = self.scnScene.rootNode.childNode(withName: "BaseDroid", recursively: true)
+        self.droid = loadBaseDroid()
+        self.scnScene.rootNode.addChildNode(self.droid)
     }
     
     func setupSounds() {
@@ -138,10 +138,16 @@ class GameViewController: UIViewController {
     }
     
     func loadBaseDroid() -> SCNNode {
-        let droidUrl = Bundle.main.url(forResource: "BaseDroid", withExtension: "scn", subdirectory: "Droid.scnassets/Droids")!
+        let droidUrl = Bundle.main.url(forResource: "BaseDroid", withExtension: "usdz", subdirectory: "Droid.scnassets/Droids")!
         let droidNode = SCNReferenceNode(url: droidUrl)!
         droidNode.load()
         droidNode.name = "BaseDroid"
+        let physicalBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: SCNSphere(radius: 1.0)))
+        physicalBody.isAffectedByGravity = false
+        physicalBody.mass = 1
+        physicalBody.collisionBitMask = -1
+        physicalBody.categoryBitMask = 1
+        droidNode.physicsBody = physicalBody
         
         return droidNode
     }
@@ -150,6 +156,18 @@ class GameViewController: UIViewController {
 extension GameViewController : SCNSceneRendererDelegate {
 
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        
+    }
+}
+
+extension GameViewController : SCNPhysicsContactDelegate {
+    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+        var contactNode : SCNNode!
+        print("Contact - nodeA: \(contact.nodeA)")
+        print("Contact - nodeA: \(contact.nodeB)")
+        if contact.nodeA.name == "Collidable" {
+            print("Contact")
+        }
         
     }
 }
