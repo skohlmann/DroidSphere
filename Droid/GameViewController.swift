@@ -28,6 +28,7 @@ class GameViewController: UIViewController {
     var scnScene : SCNScene!
     
     var cameraNode : SCNNode!
+    var cameraStartPosition : SCNVector3!
     var droid : SCNNode!
     var droidRotating = false
     
@@ -116,6 +117,7 @@ class GameViewController: UIViewController {
 
     func setupNodes() {
         self.cameraNode = self.scnScene.rootNode.childNode(withName: "OrthogonalCamera", recursively: true)
+        self.cameraStartPosition = self.cameraNode.position
         self.droid = loadBaseDroid()
         self.droid.position.x = 0
         self.droid.position.y = 1
@@ -126,7 +128,6 @@ class GameViewController: UIViewController {
     func setupSounds() {
 
     }
-    
 
     override var shouldAutorotate: Bool {
         return true
@@ -160,6 +161,14 @@ extension GameViewController : SCNSceneRendererDelegate {
 
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
+        var pos = self.droid.position
+        pos.x += self.cameraStartPosition.x
+        pos.y += self.cameraStartPosition.y
+        pos.z += self.cameraStartPosition.z
+        self.cameraNode.position = pos
     }
 }
 
