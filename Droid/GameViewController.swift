@@ -142,10 +142,6 @@ class GameViewController: UIViewController {
         let droidNode = SCNReferenceNode(url: droidUrl)!
         droidNode.load()
         droidNode.name = "BaseDroid"
-        droidNode.enumerateHierarchy({
-            (node, pointer) in
-            print("Node: \(node.name)")
-        })
         
         return droidNode
     }
