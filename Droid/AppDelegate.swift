@@ -16,6 +16,8 @@
 
 import UIKit
 
+let debug = false
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

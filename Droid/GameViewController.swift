@@ -90,20 +90,23 @@ class GameViewController: UIViewController {
                 }
                 self.lastMovedMillis = currentMillis
                 guard let direction = notification.object as? Direction else {fatalError("move notification not of type Direction")}
-                let directionVector = direction.direction.rotate(degrees: -radiansOf45Degrees)
-                let velocity = map(direction.velocity, tarlow: 0.03, tarhi: 0.5)
+//                let directionVector = direction.direction.rotate(radians: -radiansOf45Degrees)
+                let directionVector = direction.direction.rotate(radians: -radiansOf45Degrees)
+//                let velocity = map(direction.velocity, tarlow: 0.03, tarhi: 0.5)
+                let velocity = map(direction.velocity, tarlow: 0.3, tarhi: 1.5)
                 let velocityVector = directionVector * velocity
-                
-                let droidMove = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: -velocityVector.dy, duration: 0.03)
-                self.droid.runAction(SCNAction.repeatForever(droidMove), forKey: "move")
-                self.cameraNode.runAction(SCNAction.repeatForever(droidMove), forKey: "move")
+                let force = SCNVector3(velocityVector.dx, 0, -velocityVector.dy)
+                self.droid.physicsBody?.applyForce(force, asImpulse: false)
+//                let droidMove = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: -velocityVector.dy, duration: 0.03)
+//                self.droid.runAction(SCNAction.repeatForever(droidMove), forKey: "move")
+//                self.cameraNode.runAction(SCNAction.repeatForever(droidMove), forKey: "move")
             }
         }
 
         self.moveStoppedObserver = NotificationCenter.default.addObserver(forName: self.moveStoppedName, object: nil, queue: nil) { notification in
             if self.droid != nil {
-                self.droid.removeAction(forKey: "move")
-                self.cameraNode.removeAction(forKey: "move")
+//                self.droid.removeAction(forKey: "move")
+//                self.cameraNode.removeAction(forKey: "move")
             }
         }
     }
@@ -166,8 +169,14 @@ class GameViewController: UIViewController {
         droidNode.name = "BaseDroid"
         let physics = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: SCNSphere(radius: 1.0)))
         physics.isAffectedByGravity = false
-        physics.type = .kinematic
+        physics.type = .dynamic
         physics.mass = 1
+        physics.friction = 1
+        physics.rollingFriction = 0
+        physics.restitution = 0
+        physics.damping = 0.1
+        physics.angularDamping = 0
+        physics.charge = 0
         physics.collisionBitMask = 1
         physics.categoryBitMask = 1
         physics.contactTestBitMask = ColliderType.barrier.rawValue | ColliderType.shot.rawValue | ColliderType.rocket.rawValue
@@ -184,10 +193,14 @@ extension GameViewController : SCNSceneRendererDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
-//        self.cameraNode.position = self.droid.position + self.cameraStartPosition
-        self.backLight.position = self.droid.position + self.backLightStartPosition
-        self.frontLight.position = self.droid.position + self.frontLightStartPosition
-        self.shadowLight.position = self.droid.position + self.shadowLightStartPosition
+        if debug {
+            print("Droid presentation pos: \(self.droid.presentation.position)")
+            print("Droid presentation world pos: \(self.droid.presentation.worldPosition)")
+        }
+        self.cameraNode.position = self.droid.presentation.position + self.cameraStartPosition
+        self.backLight.position = self.droid.presentation.position + self.backLightStartPosition
+        self.frontLight.position = self.droid.presentation.position + self.frontLightStartPosition
+        self.shadowLight.position = self.droid.presentation.position + self.shadowLightStartPosition
     }
 }
 
@@ -202,6 +215,8 @@ extension GameViewController : SCNPhysicsContactDelegate {
         if self.lastContactNode != nil && self.lastContactNode == contactNode {
             return
         }
+        print("world position: \(contactNode.presentation.worldPosition)")
+        print("position: \(contactNode.position)")
         self.lastContactNode = contactNode
         print("Contact begins with: \(contactNode)")
     }

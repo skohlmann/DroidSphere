@@ -18,8 +18,6 @@ import Foundation
 import SpriteKit
 import SceneKit
 
-let debug = false
-
 class HUD : SKScene {
     
     var coordinateLabel : SKLabelNode!
