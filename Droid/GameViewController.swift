@@ -137,7 +137,7 @@ class GameViewController: UIViewController {
 
         self.droid = loadBaseDroid()
         self.droid.position.x = 0
-        self.droid.position.y = 1
+        self.droid.position.y = 2
         self.droid.position.z = 0
         self.scnScene.rootNode.addChildNode(self.droid)
     }
