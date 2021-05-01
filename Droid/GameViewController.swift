@@ -34,6 +34,13 @@ class GameViewController: UIViewController {
     
     var overlayScene : HUD!
     var coordinateLabel : SKLabelNode!
+    
+    var frontLight : SCNNode!
+    var frontLightStartPosition : SCNVector3!
+    var backLight : SCNNode!
+    var backLightStartPosition : SCNVector3!
+    var shadowLight : SCNNode!
+    var shadowLightStartPosition : SCNVector3!
 
     var spawnTime : TimeInterval = 0
     
@@ -86,10 +93,9 @@ class GameViewController: UIViewController {
                 let directionVector = direction.direction.rotate(degrees: -45)
                 let velocity = map(direction.velocity, tarlow: 0.03, tarhi: 0.3)
                 let velocityVector = directionVector * velocity
-                let moveBox = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: -velocityVector.dy, duration: 0.03)
-                self.droid.runAction(SCNAction.repeatForever(moveBox), forKey: "move")
-                self.cameraNode.runAction(SCNAction.repeatForever(moveBox), forKey: "move")
-
+                let droidMove = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: -velocityVector.dy, duration: 0.03)
+                self.droid.runAction(SCNAction.repeatForever(droidMove), forKey: "move")
+                self.cameraNode.runAction(SCNAction.repeatForever(droidMove), forKey: "move")
             }
         }
 
@@ -112,12 +118,23 @@ class GameViewController: UIViewController {
         self.scnScene = SCNScene(named: "Droid.scnassets/Scenes/Game.scn")
         self.scnView.scene = self.scnScene
         self.scnView.antialiasingMode = .none
+        
+        self.scnScene.physicsWorld.contactDelegate = self
 
     }
 
     func setupNodes() {
         self.cameraNode = self.scnScene.rootNode.childNode(withName: "OrthogonalCamera", recursively: true)
         self.cameraStartPosition = self.cameraNode.position
+
+        self.frontLight = self.scnScene.rootNode.childNode(withName: "FrontLight", recursively: true)
+        self.frontLightStartPosition = self.frontLight.position
+        self.backLight = self.scnScene.rootNode.childNode(withName: "BackLight", recursively: true)
+        self.backLightStartPosition = self.backLight.position
+        self.shadowLight = self.scnScene.rootNode.childNode(withName: "ShadowLight", recursively: true)
+        self.shadowLightStartPosition = self.shadowLight.position
+
+
         self.droid = loadBaseDroid()
         self.droid.position.x = 0
         self.droid.position.y = 1
@@ -146,13 +163,14 @@ class GameViewController: UIViewController {
         let droidNode = SCNReferenceNode(url: droidUrl)!
         droidNode.load()
         droidNode.name = "BaseDroid"
-        let physicalBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: SCNSphere(radius: 1.0)))
-        physicalBody.isAffectedByGravity = false
-        physicalBody.mass = 1
-        physicalBody.collisionBitMask = -1
-        physicalBody.categoryBitMask = 1
-        droidNode.physicsBody = physicalBody
-        
+        let physics = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: SCNSphere(radius: 1.0)))
+        physics.isAffectedByGravity = false
+        physics.mass = 1
+        physics.collisionBitMask = 1
+        physics.categoryBitMask = 1
+        physics.contactTestBitMask = ColliderType.barrier.rawValue | ColliderType.shot.rawValue | ColliderType.rocket.rawValue
+        droidNode.physicsBody = physics
+
         return droidNode
     }
 }
@@ -164,22 +182,37 @@ extension GameViewController : SCNSceneRendererDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
-        var pos = self.droid.position
-        pos.x += self.cameraStartPosition.x
-        pos.y += self.cameraStartPosition.y
-        pos.z += self.cameraStartPosition.z
-        self.cameraNode.position = pos
+        self.cameraNode.position = self.droid.position + self.cameraStartPosition
+        self.backLight.position = self.droid.position + self.backLightStartPosition
+        self.frontLight.position = self.droid.position + self.frontLightStartPosition
+        self.shadowLight.position = self.droid.position + self.shadowLightStartPosition
     }
 }
 
 extension GameViewController : SCNPhysicsContactDelegate {
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
         var contactNode : SCNNode!
-        print("Contact - nodeA: \(contact.nodeA)")
-        print("Contact - nodeA: \(contact.nodeB)")
-        if contact.nodeA.name == "Collidable" {
-            print("Contact")
+        if contact.nodeA.name == "BaseDroid" {
+            contactNode = contact.nodeB
+        } else {
+            contactNode = contact.nodeA
         }
-        
+        if self.lastContactNode != nil && self.lastContactNode == contactNode {
+            return
+        }
+        self.lastContactNode = contactNode
+        print("Contact begins with: \(contactNode)")
+    }
+    
+    func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
+        var contactNode : SCNNode!
+        if contact.nodeA.name == "BaseDroid" {
+            contactNode = contact.nodeB
+        } else {
+            contactNode = contact.nodeA
+        }
+        if lastContactNode == contactNode {
+            print("Contact ends with: \(contactNode)")
+        }
     }
 }

@@ -15,6 +15,7 @@
 //  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import CoreGraphics
+import SceneKit
 
 extension CGPoint {
     
@@ -178,5 +179,18 @@ extension CGVector {
     
     @inline(__always) func toCGPoint() -> CGPoint {
         return CGPoint(x: self.dx, y: self.dy)
+    }
+}
+
+extension SCNVector3 {
+    
+    @inline(__always) static func +=(lhs:inout SCNVector3, rhs:SCNVector3) {
+        lhs.x = lhs.x + rhs.x
+        lhs.y = lhs.y + rhs.y
+        lhs.z = lhs.z + rhs.z
+    }
+    
+    @inline(__always) static func +(lhs: SCNVector3, rhs:SCNVector3) -> SCNVector3 {
+        return SCNVector3(x: lhs.x + rhs.x, y: lhs.y + rhs.y, z: lhs.z + rhs.z)
     }
 }

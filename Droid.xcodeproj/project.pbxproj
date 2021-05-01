@@ -20,6 +20,7 @@
 		458FFB6F262AF32400B18991 /* GameHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458FFB6C262AF32400B18991 /* GameHelper.swift */; };
 		458FFB77262AF65400B18991 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458FFB76262AF65400B18991 /* Angle.swift */; };
 		458FFB7C262AF69D00B18991 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458FFB7B262AF69D00B18991 /* Map.swift */; };
+		45A6A352263D0B34000FD80B /* ColliderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A6A351263D0B34000FD80B /* ColliderType.swift */; };
 		45B8993826373DF900823CC8 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B8993726373DF900823CC8 /* Direction.swift */; };
 		45B89940263743BA00823CC8 /* Vector+Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B8993F263743BA00823CC8 /* Vector+Point.swift */; };
 /* End PBXBuildFile section */
@@ -61,6 +62,7 @@
 		458FFB6C262AF32400B18991 /* GameHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHelper.swift; sourceTree = "<group>"; };
 		458FFB76262AF65400B18991 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
 		458FFB7B262AF69D00B18991 /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
+		45A6A351263D0B34000FD80B /* ColliderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColliderType.swift; sourceTree = "<group>"; };
 		45B8993726373DF900823CC8 /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		45B8993F263743BA00823CC8 /* Vector+Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vector+Point.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,6 +124,7 @@
 				458FFB57262AF20F00B18991 /* Utils */,
 				45B8993626373D6700823CC8 /* Common */,
 				451E2EC8262B65DD00701255 /* Info.plist */,
+				45A6A351263D0B34000FD80B /* ColliderType.swift */,
 			);
 			path = Droid;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				455217E3262DA488007388CF /* HUD.swift in Sources */,
 				458FFB5B262AF22B00B18991 /* Color+Extensions.swift in Sources */,
 				458FFB6F262AF32400B18991 /* GameHelper.swift in Sources */,
+				45A6A352263D0B34000FD80B /* ColliderType.swift in Sources */,
 				45B8993826373DF900823CC8 /* Direction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
