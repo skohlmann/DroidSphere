@@ -90,7 +90,7 @@ class GameViewController: UIViewController {
                 }
                 self.lastMovedMillis = currentMillis
                 guard let direction = notification.object as? Direction else {fatalError("move notification not of type Direction")}
-                let directionVector = direction.direction.rotate(degrees: -45)
+                let directionVector = direction.direction.rotate(degrees: -radiansOf45Degrees)
                 let velocity = map(direction.velocity, tarlow: 0.03, tarhi: 0.3)
                 let velocityVector = directionVector * velocity
                 let droidMove = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: -velocityVector.dy, duration: 0.03)

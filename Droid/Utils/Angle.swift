@@ -43,6 +43,8 @@ let deg_to_rad : Double = .pi / 180.0
     return radians * CGFloat(rad_to_deg)
 }
 
+let radiansOf45Degrees : CGFloat = radians(45)
+
 extension CGPoint {
     
     func rotate(radians: CGFloat) -> CGPoint {
