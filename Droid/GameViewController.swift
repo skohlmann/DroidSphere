@@ -91,8 +91,9 @@ class GameViewController: UIViewController {
                 self.lastMovedMillis = currentMillis
                 guard let direction = notification.object as? Direction else {fatalError("move notification not of type Direction")}
                 let directionVector = direction.direction.rotate(degrees: -radiansOf45Degrees)
-                let velocity = map(direction.velocity, tarlow: 0.03, tarhi: 0.3)
+                let velocity = map(direction.velocity, tarlow: 0.03, tarhi: 0.5)
                 let velocityVector = directionVector * velocity
+                
                 let droidMove = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: -velocityVector.dy, duration: 0.03)
                 self.droid.runAction(SCNAction.repeatForever(droidMove), forKey: "move")
                 self.cameraNode.runAction(SCNAction.repeatForever(droidMove), forKey: "move")
@@ -109,7 +110,7 @@ class GameViewController: UIViewController {
 
     func setupScene() {
         self.scnView = (self.view as! SCNView)
-        self.scnView.showsStatistics = true
+        if debug { self.scnView.showsStatistics = true }
         self.scnView.delegate = self
 
         self.overlayScene = HUD(size: self.scnView.bounds.size, scene: self)
@@ -165,6 +166,7 @@ class GameViewController: UIViewController {
         droidNode.name = "BaseDroid"
         let physics = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: SCNSphere(radius: 1.0)))
         physics.isAffectedByGravity = false
+        physics.type = .kinematic
         physics.mass = 1
         physics.collisionBitMask = 1
         physics.categoryBitMask = 1
@@ -182,7 +184,7 @@ extension GameViewController : SCNSceneRendererDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
-        self.cameraNode.position = self.droid.position + self.cameraStartPosition
+//        self.cameraNode.position = self.droid.position + self.cameraStartPosition
         self.backLight.position = self.droid.position + self.backLightStartPosition
         self.frontLight.position = self.droid.position + self.frontLightStartPosition
         self.shadowLight.position = self.droid.position + self.shadowLightStartPosition
