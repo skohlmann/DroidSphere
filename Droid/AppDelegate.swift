@@ -17,6 +17,7 @@
 import UIKit
 
 let debug = false
+let useForce = true
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

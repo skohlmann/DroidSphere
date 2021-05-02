@@ -193,4 +193,8 @@ extension SCNVector3 {
     @inline(__always) static func +(lhs: SCNVector3, rhs:SCNVector3) -> SCNVector3 {
         return SCNVector3(x: lhs.x + rhs.x, y: lhs.y + rhs.y, z: lhs.z + rhs.z)
     }
+    
+    static func zero() -> SCNVector3 {
+        return SCNVector3(0, 0, 0)
+    }
 }
