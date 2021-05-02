@@ -30,6 +30,7 @@ class GameViewController: UIViewController {
     var cameraNode : SCNNode!
     var cameraStartPosition : SCNVector3!
     var droid : SCNNode!
+    var droidForce : SCNVector3!
     var droidRotating = false
     
     var overlayScene : HUD!
@@ -70,6 +71,15 @@ class GameViewController: UIViewController {
         }
     }
     
+    fileprivate func maximumNoInteractionReached() -> Bool {
+        let currentMillis = Date().millisecondsSince1970
+        if currentMillis < self.millisBetweenPossibleMoveChange + self.lastMovedMillis {
+            return false
+        }
+        self.lastMovedMillis = currentMillis
+        return true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.tappedObserver = NotificationCenter.default.addObserver(forName: self.tappedName, object: nil, queue: nil) { notification in
             if debug {
@@ -78,21 +88,15 @@ class GameViewController: UIViewController {
         }
 
         self.movedObserver = NotificationCenter.default.addObserver(forName: self.movedName, object: nil, queue: nil) { notification in
-            if self.droid != nil {
-                let currentMillis = Date().millisecondsSince1970
-                if currentMillis < self.millisBetweenPossibleMoveChange + self.lastMovedMillis {
-                    return
-                }
-                self.lastMovedMillis = currentMillis
+            if self.droid != nil && self.maximumNoInteractionReached() {
                 guard let direction = notification.object as? Direction else {fatalError("move notification not of type Direction")}
+                let directionVector = direction.direction.rotate(radians: -radiansOf45Degrees)
                 if useForce {
-                    let directionVector = direction.direction.rotate(radians: -radiansOf45Degrees)
                     let velocity = map(direction.velocity, tarlow: 0.3, tarhi: 1.5)
                     let velocityVector = directionVector * velocity
-                    let force = SCNVector3(velocityVector.dx, 0, -velocityVector.dy)
-                    self.droid.physicsBody?.applyForce(force, asImpulse: false)
+                    self.droidForce = SCNVector3(velocityVector.dx, 0, -velocityVector.dy)
+                    self.droid.physicsBody?.applyForce(self.droidForce, asImpulse: false)
                 } else {
-                    let directionVector = direction.direction.rotate(radians: -radiansOf45Degrees)
                     let velocity = map(direction.velocity, tarlow: 0.03, tarhi: 0.5)
                     let velocityVector = directionVector * velocity
                     let droidMove = SCNAction.moveBy(x: velocityVector.dx, y: 0, z: -velocityVector.dy, duration: 0.03)
@@ -106,6 +110,8 @@ class GameViewController: UIViewController {
                 if !useForce {
                     self.droid.removeAction(forKey: "move")
                     self.cameraNode.removeAction(forKey: "move")
+                } else {
+                    self.droidForce = nil
                 }
             }
         }
@@ -141,7 +147,7 @@ class GameViewController: UIViewController {
 
         self.droid = loadBaseDroid()
         self.droid.position.x = 0
-        self.droid.position.y = 2
+        self.droid.position.y = 1
         self.droid.position.z = 0
         self.scnScene.rootNode.addChildNode(self.droid)
         
@@ -183,9 +189,9 @@ class GameViewController: UIViewController {
             physics.mass = 1
             physics.friction = 1
             physics.rollingFriction = 0
-            physics.restitution = 0
+            physics.restitution = 1
             physics.damping = 0.1
-            physics.angularDamping = 0
+            physics.angularDamping = 1 // Blocks rotating where 0 allows rotating
             physics.charge = 0
             physics.momentOfInertia = SCNVector3.zero()
         }
@@ -205,12 +211,19 @@ extension GameViewController : SCNSceneRendererDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
-        if useForce {
+        if useForce && self.droid != nil {
             self.cameraNode.position = self.droid.presentation.position + self.cameraStartPosition
             self.backLight.position = self.droid.presentation.position + self.backLightStartPosition
             self.frontLight.position = self.droid.presentation.position + self.frontLightStartPosition
             self.shadowLight.position = self.droid.presentation.position + self.shadowLightStartPosition
+            
+            if self.droidForce != nil && maximumNoInteractionReached() {
+                self.droid?.physicsBody?.applyForce(self.droidForce, asImpulse: false)
+            }
         }
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didApply scene: SCNScene, atTime time: TimeInterval) {
     }
 }
 
