@@ -26,7 +26,7 @@ class GameViewController: UIViewController {
 
     var scnView : SCNView!
     var scnScene : SCNScene!
-    
+
     var cameraNode : SCNNode!
     var cameraStartPosition : SCNVector3!
     var droid : SCNNode!
@@ -92,7 +92,7 @@ class GameViewController: UIViewController {
                 guard let direction = notification.object as? Direction else {fatalError("move notification not of type Direction")}
                 let directionVector = direction.direction.rotate(radians: -radiansOf45Degrees)
                 if useForce {
-                    let velocity = map(direction.velocity, tarlow: 0.3, tarhi: 1.5)
+                    let velocity = map(direction.velocity, tarlow: 2, tarhi: 7)
                     let velocityVector = directionVector * velocity
                     self.droidForce = SCNVector3(velocityVector.dx, 0, -velocityVector.dy)
                     self.droid.physicsBody?.applyForce(self.droidForce, asImpulse: false)
@@ -190,7 +190,7 @@ class GameViewController: UIViewController {
             physics.friction = 1
             physics.rollingFriction = 0
             physics.restitution = 1
-            physics.damping = 0.1
+            physics.damping = 0.5
             physics.angularDamping = 1 // Blocks rotating where 0 allows rotating
             physics.charge = 0
             physics.momentOfInertia = SCNVector3.zero()
@@ -217,6 +217,7 @@ extension GameViewController : SCNSceneRendererDelegate {
             self.frontLight.position = self.droid.presentation.position + self.frontLightStartPosition
             self.shadowLight.position = self.droid.presentation.position + self.shadowLightStartPosition
             
+            self.droid.position = self.droid.presentation.position
             if self.droidForce != nil && maximumNoInteractionReached() {
                 self.droid?.physicsBody?.applyForce(self.droidForce, asImpulse: false)
             }

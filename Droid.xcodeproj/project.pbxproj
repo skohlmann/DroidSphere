@@ -121,7 +121,7 @@
 				457186C4262AC667007C3BC4 /* Main.storyboard */,
 				457186C7262AC66A007C3BC4 /* Assets.xcassets */,
 				457186F4262AC6F2007C3BC4 /* Droid.scnassets */,
-				458FFB57262AF20F00B18991 /* Utils */,
+				458FFB57262AF20F00B18991 /* Extensions */,
 				45B8993626373D6700823CC8 /* Common */,
 				451E2EC8262B65DD00701255 /* Info.plist */,
 				45A6A351263D0B34000FD80B /* ColliderType.swift */,
@@ -147,7 +147,7 @@
 			path = DroidUITests;
 			sourceTree = "<group>";
 		};
-		458FFB57262AF20F00B18991 /* Utils */ = {
+		458FFB57262AF20F00B18991 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				458FFB6C262AF32400B18991 /* GameHelper.swift */,
@@ -157,7 +157,7 @@
 				458FFB7B262AF69D00B18991 /* Map.swift */,
 				45B8993F263743BA00823CC8 /* Vector+Point.swift */,
 			);
-			path = Utils;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		45B8993626373D6700823CC8 /* Common */ = {
