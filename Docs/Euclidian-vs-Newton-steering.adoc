@@ -1,6 +1,6 @@
 = Euclidian vs. Newton game steering
 
-After finishing the joystick, I started with moviing the player droid around on the playfield.
+After finishing the gamepad, I started with moviing the player droid around on the playfield.
 
 
 == anchor:euclidian-movement[] Simple XY (euclidian) movement
@@ -10,7 +10,7 @@ The implementation based on a `SCNAction` created with the `moveBy` method enclo
 
 === anchor:too-much-events[] Too much events cause a poor movement pattern
 
-In my naive approch a reseted this action with every change event (`onTouchesMoved`) by the joystick. 
+In my naive approch a reseted this action with every change event (`onTouchesMoved`) by the gamepad. 
 This resulted in a very modest movement pattern.
 The events came way too fast and the movement became slower and slower when the user changed direction.
 
@@ -24,7 +24,7 @@ Not really fast, but massively parallel :-)
 After the XY based implementation, I thought that a physic engine based implementation would allow more natural movements.
 This means that the player character's movement is also affected by things like mass, friction, and damping.
 
-Example: the player accelerates his character by moving the joystick.
+Example: the player accelerates his character by moving the gamepad.
 Then he changes the direction.
 Based on his current speed and damping, the direction change is delayed and the character slides across the playing field.  
 
@@ -43,7 +43,7 @@ However, there are several problems at once.
 
 == Problems with physics engine controlled steering
 
-The joystick provides a normalized direction vector and a velocity between 0 and 1.
+The gamepad provides a normalized direction vector and a velocity between 0 and 1.
 The speed is mapped to a value between minimum speed and maximum speed min game.
 For example, to a value between 0.3 and 4.
 The values are chosen arbitrarily for now.
@@ -52,9 +52,9 @@ The direction vector is multiplied by the mapped velocity and thus the https://d
 
 The problems:
 
-1. based on the basic configuration of `SCNPhysicsBody`, the player character takes a very long time to come to a stop when the joystick reports a stop move.
+1. based on the basic configuration of `SCNPhysicsBody`, the player character takes a very long time to come to a stop when the gamepad reports a stop move.
 2. changing the direction with the common `SCNPhysicsBody` configuration results in heavy slidings.
-3. the damping doesn't allow a continous movement if the joystick is still in the movement phase.
+3. the damping doesn't allow a continous movement if the gamepad is still in the movement phase.
   After a while the players character stops.
 4. the position coordinates of the player character are not updated.
 
@@ -71,13 +71,13 @@ This problem is a little more difficult to solve.
 But the question is: why does it need to be solved at all?
 
 The reason to solve the problem is the player experience.
-While the player controls his character with the joystick, he easily recognizes that he must permanently move the virtual joystick on the touch device in the direction in which his character should move in order not to lose velocity.
+While the player controls his character with the gamepad, he easily recognizes that he must permanently move the virtual gamepad on the touch device in the direction in which his character should move in order not to lose velocity.
 This is not intuitive.
 In such a behavior, the player has to interrupt the movement in between, for example, to reposition his finger on the touch device to contiue the mevement.
 Touch devices are not as big as the virtual game world can be.
 
 As a solution, I implemented a mechanism similar the <<too-much-events, "Too much events cause a poor movement pattern">> solution.
-If no new interaction was sent from the joystick within an interval of 33 milliseconds, `applyForce` is called again with the original direction vector.
+If no new interaction was sent from the gamepad within an interval of 33 milliseconds, `applyForce` is called again with the original direction vector.
 This mechanis is implemented in the method https://developer.apple.com/documentation/scenekit/scnscenerendererdelegate/1523483-renderer[`func renderer(_:willRenderScene, atTime)`] of https://developer.apple.com/documentation/scenekit/scnscenerendererdelegate[`SCNSceneRendererDelegate`].
 
 === Solving the problem 4.

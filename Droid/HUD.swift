@@ -22,21 +22,21 @@ class HUD : SKScene {
     
     var coordinateLabel : SKLabelNode!
     var overView : GameViewController
-    let joystick : Joystick
+    let gamepad : GamePad
 
     init(size: CGSize, scene : GameViewController) {
         
         self.overView = scene
-        self.joystick = Joystick(name: "left joystick", firstInputIn: Circle(at: CGPoint(x: 0, y: 0), with: size.width / 2))
-        self.joystick.position.x = 100
-        self.joystick.position.y = 140
-        self.joystick.tapped = scene.tappedName
-        self.joystick.moved = scene.movedName
-        self.joystick.moveStopped = scene.moveStoppedName
+        self.gamepad = GamePad(name: "left gamepad", firstInputIn: Circle(at: CGPoint(x: 0, y: 0), with: size.width / 2))
+        self.gamepad.position.x = 100
+        self.gamepad.position.y = 140
+        self.gamepad.tapped = scene.tappedName
+        self.gamepad.moved = scene.movedName
+        self.gamepad.moveStopped = scene.moveStoppedName
 
         super.init(size: size)
 
-        self.addChild(self.joystick)
+        self.addChild(self.gamepad)
 
         if debug {
             self.coordinateLabel = SKLabelNode(text: "")
@@ -65,44 +65,44 @@ class HUD : SKScene {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.joystick.onTouchesBegan(touches, with: event, for : self)
+        self.gamepad.onTouchesBegan(touches, with: event, for : self)
         updateCoordinates(touches)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.joystick.onTouchesMoved(touches, with: event, for : self)
+        self.gamepad.onTouchesMoved(touches, with: event, for : self)
         updateCoordinates(touches)
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.joystick.onTouchesCancelled(touches, with: event, for : self)
+        self.gamepad.onTouchesCancelled(touches, with: event, for : self)
         updateCoordinates(touches)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.joystick.onTouchesEnded(touches, with: event, for : self)
+        self.gamepad.onTouchesEnded(touches, with: event, for : self)
         updateCoordinates(touches)
     }
     
     fileprivate func updateCoordinates(_ touches : Set<UITouch>) {
         if debug {
-            self.coordinateLabel.text =  "Coordinates - current: x=\(Int((touches.first?.location(in: self.joystick).x)!)) · y=\(Int((touches.first?.location(in: self.joystick).y)!)) - previous: x=\(Int((touches.first?.previousLocation(in: self).x)!)) · y=\(Int((touches.first?.previousLocation(in: self).y)!))"
+            self.coordinateLabel.text =  "Coordinates - current: x=\(Int((touches.first?.location(in: self.gamepad).x)!)) · y=\(Int((touches.first?.location(in: self.gamepad).y)!)) - previous: x=\(Int((touches.first?.previousLocation(in: self).x)!)) · y=\(Int((touches.first?.previousLocation(in: self).y)!))"
         }
     }
 }
 
-class Joystick : SKNode {
+class GamePad : SKNode {
     
     let firstInputCircle : Circle
     
-    let joystickMaxMove = CGFloat(30)
-    let joystickMaxMoveBounds = CGFloat(30) - 4
-    let joystickMininumMoveDistance : CGFloat = 2
+    let gamepadMaxMove = CGFloat(30)
+    let gamepadMaxMoveBounds = CGFloat(30) - 4
+    let gamepadMininumMoveDistance : CGFloat = 2
 
     var motionActive = false
 
-    var joystickInner : SKShapeNode!
-    var joystickOuter : SKShapeNode!
+    var gamepadInner : SKShapeNode!
+    var gamepadOuter : SKShapeNode!
     
     var beganPosition : CGPoint!
     var beganTime : Int64
@@ -116,21 +116,21 @@ class Joystick : SKNode {
     
     init(name : String = "Joystick", firstInputIn : Circle) {
         self.beganTime = Date().millisecondsSince1970
-        self.joystickInner = SKShapeNode(circleOfRadius: 20)
-        self.joystickInner.fillColor = .white
-        self.joystickInner.strokeColor = .lightGray
-        self.joystickInner.alpha = 20
+        self.gamepadInner = SKShapeNode(circleOfRadius: 20)
+        self.gamepadInner.fillColor = .white
+        self.gamepadInner.strokeColor = .lightGray
+        self.gamepadInner.alpha = 20
 
-        self.joystickOuter = SKShapeNode(circleOfRadius: 20 + joystickMaxMove)
-        self.joystickOuter.fillColor = .clear
-        self.joystickOuter.strokeColor = .white
+        self.gamepadOuter = SKShapeNode(circleOfRadius: 20 + gamepadMaxMove)
+        self.gamepadOuter.fillColor = .clear
+        self.gamepadOuter.strokeColor = .white
         
         self.firstInputCircle = firstInputIn
 
         super.init()
         self.name = name
-        self.addChild(self.joystickInner)
-        self.addChild(self.joystickOuter)
+        self.addChild(self.gamepadInner)
+        self.addChild(self.gamepadOuter)
     }
     
     func onTouchesBegan(_ touches: Set<UITouch>, with event: UIEvent?, for scene : SKScene) {
@@ -138,7 +138,7 @@ class Joystick : SKNode {
         if self.beganPosition == nil {
             self.beganPosition = self.position
         }
-        self.distanceTolerance = myTouch.majorRadiusTolerance > self.joystickMininumMoveDistance ? myTouch.majorRadiusTolerance : self.joystickMininumMoveDistance
+        self.distanceTolerance = myTouch.majorRadiusTolerance > self.gamepadMininumMoveDistance ? myTouch.majorRadiusTolerance : self.gamepadMininumMoveDistance
         self.beganTime = Date().millisecondsSince1970
         initLongTouchTimer(myTouch)
     }
@@ -151,8 +151,8 @@ class Joystick : SKNode {
         guard let eventData = timer.userInfo as? (beganTime: Int64, event: UITouch) else {fatalError("long press value not of type (beganTime: Int64, event: UITouch)")}
         if eventData.beganTime == self.beganTime {
             self.longPress = true
-            self.joystickInner.glowWidth = 1.0
-            self.joystickOuter.glowWidth = 2.0
+            self.gamepadInner.glowWidth = 1.0
+            self.gamepadOuter.glowWidth = 2.0
 
             self.position = calculateNewPosition(start: self.position, withDifference: eventData.event.location(in: self))
         }
@@ -179,14 +179,14 @@ class Joystick : SKNode {
         
         if self.motionActive {
             let directionVector = self.position.direction(to: myScenePosition)
-            if distance > self.joystickMaxMoveBounds {
-                let shiftFactor = 1 - self.joystickMaxMoveBounds / distance
+            if distance > self.gamepadMaxMoveBounds {
+                let shiftFactor = 1 - self.gamepadMaxMoveBounds / distance
                 let shiftVector = directionVector * shiftFactor
                 self.position += shiftVector
             }
-            self.joystickInner.position = myTouch.location(in: self)
+            self.gamepadInner.position = myTouch.location(in: self)
             if self.moved != nil {
-                let velocity = map(distance <= self.joystickMaxMoveBounds ? distance : self.joystickMaxMoveBounds, vallow: 0, valhi: self.joystickMaxMoveBounds, tarlow: 0, tarhi: 1)
+                let velocity = map(distance <= self.gamepadMaxMoveBounds ? distance : self.gamepadMaxMoveBounds, vallow: 0, valhi: self.gamepadMaxMoveBounds, tarlow: 0, tarhi: 1)
                 let normalized = directionVector.normalized
                 let vector = CGVector(dx: normalized.x, dy: normalized.y)
                 NotificationCenter.default.post(name: self.moved, object: Direction(direction: vector, velocity: velocity))
@@ -206,13 +206,13 @@ class Joystick : SKNode {
         }
 
         if self.longPress {
-            self.joystickInner.glowWidth = 0
-            self.joystickOuter.glowWidth = 0
+            self.gamepadInner.glowWidth = 0
+            self.gamepadOuter.glowWidth = 0
             self.moveStarted = false
             self.motionActive = false
             if self.beganPosition != nil {
                 self.position = self.beganPosition
-                self.joystickInner.position = CGPoint(x: 0, y: 0)
+                self.gamepadInner.position = CGPoint(x: 0, y: 0)
             }
             if self.moveStopped != nil {
                 NotificationCenter.default.post(name: self.moveStopped, object: myTouch.location(in: scene))

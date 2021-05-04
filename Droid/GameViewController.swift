@@ -21,8 +21,8 @@ import SpriteKit
 class GameViewController: UIViewController {
     
     let tappedName = Notification.Name("button1 tapped")
-    let movedName = Notification.Name("stick1 moved")
-    let moveStoppedName = Notification.Name("stick1 move stopped")
+    let movedName = Notification.Name("gamepad1 moved")
+    let moveStoppedName = Notification.Name("gamepad1 move stopped")
 
     var scnView : SCNView!
     var scnScene : SCNScene!
