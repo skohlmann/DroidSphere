@@ -16,17 +16,20 @@
 
 import Foundation
 import SceneKit
+
 class PhysicsComponent: BaseComponent {
-    // MARK: Properties
     
     var physicsBody: SCNPhysicsBody
-    
-    // MARK: Initializers
     
     init(physicsBody: SCNPhysicsBody, colliderType: ColliderType) {
         self.physicsBody = physicsBody
         self.physicsBody.categoryBitMask = colliderType.categoryMask
         self.physicsBody.collisionBitMask = colliderType.collisionMask
         self.physicsBody.contactTestBitMask = colliderType.contactMask
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
