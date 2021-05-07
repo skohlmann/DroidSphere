@@ -23,6 +23,16 @@
 		45A6A352263D0B34000FD80B /* ColliderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A6A351263D0B34000FD80B /* ColliderType.swift */; };
 		45B8993826373DF900823CC8 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B8993726373DF900823CC8 /* Direction.swift */; };
 		45B89940263743BA00823CC8 /* Vector+Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B8993F263743BA00823CC8 /* Vector+Point.swift */; };
+		45CEA73A26452A4200000CAE /* NodeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA73726452A4200000CAE /* NodeComponent.swift */; };
+		45CEA73B26452A4200000CAE /* BaseComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA73826452A4200000CAE /* BaseComponent.swift */; };
+		45CEA73C26452A4200000CAE /* PositionComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA73926452A4200000CAE /* PositionComponent.swift */; };
+		45CEA74126452A6700000CAE /* BaseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA73E26452A6700000CAE /* BaseEntity.swift */; };
+		45CEA74226452A6700000CAE /* Droid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA73F26452A6700000CAE /* Droid.swift */; };
+		45CEA74326452A6700000CAE /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA74026452A6700000CAE /* Enemy.swift */; };
+		45CEA74726452A8F00000CAE /* UpdatablePerFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA74526452A8F00000CAE /* UpdatablePerFrame.swift */; };
+		45CEA74826452A8F00000CAE /* Nameable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA74626452A8F00000CAE /* Nameable.swift */; };
+		45CEA74A26452ABD00000CAE /* ContactNotifiableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA74926452ABD00000CAE /* ContactNotifiableType.swift */; };
+		45CEA74C26453AD700000CAE /* PhysicsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA74B26453AD700000CAE /* PhysicsComponent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +75,16 @@
 		45A6A351263D0B34000FD80B /* ColliderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColliderType.swift; sourceTree = "<group>"; };
 		45B8993726373DF900823CC8 /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		45B8993F263743BA00823CC8 /* Vector+Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vector+Point.swift"; sourceTree = "<group>"; };
+		45CEA73726452A4200000CAE /* NodeComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeComponent.swift; sourceTree = "<group>"; };
+		45CEA73826452A4200000CAE /* BaseComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseComponent.swift; sourceTree = "<group>"; };
+		45CEA73926452A4200000CAE /* PositionComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PositionComponent.swift; sourceTree = "<group>"; };
+		45CEA73E26452A6700000CAE /* BaseEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseEntity.swift; sourceTree = "<group>"; };
+		45CEA73F26452A6700000CAE /* Droid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Droid.swift; sourceTree = "<group>"; };
+		45CEA74026452A6700000CAE /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
+		45CEA74526452A8F00000CAE /* UpdatablePerFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdatablePerFrame.swift; sourceTree = "<group>"; };
+		45CEA74626452A8F00000CAE /* Nameable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nameable.swift; sourceTree = "<group>"; };
+		45CEA74926452ABD00000CAE /* ContactNotifiableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactNotifiableType.swift; sourceTree = "<group>"; };
+		45CEA74B26453AD700000CAE /* PhysicsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsComponent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +135,10 @@
 		457186BD262AC667007C3BC4 /* Droid */ = {
 			isa = PBXGroup;
 			children = (
+				45CEA74426452A7A00000CAE /* Protocols */,
+				45CEA73D26452A5C00000CAE /* Entities */,
+				45CEA73026452A2C00000CAE /* Components */,
+				45CEA72F26452A1400000CAE /* Physics Contacts & Collision */,
 				457186BE262AC667007C3BC4 /* AppDelegate.swift */,
 				457186C2262AC667007C3BC4 /* GameViewController.swift */,
 				455217E2262DA488007388CF /* HUD.swift */,
@@ -124,7 +148,6 @@
 				458FFB57262AF20F00B18991 /* Extensions */,
 				45B8993626373D6700823CC8 /* Common */,
 				451E2EC8262B65DD00701255 /* Info.plist */,
-				45A6A351263D0B34000FD80B /* ColliderType.swift */,
 			);
 			path = Droid;
 			sourceTree = "<group>";
@@ -166,6 +189,45 @@
 				45B8993726373DF900823CC8 /* Direction.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		45CEA72F26452A1400000CAE /* Physics Contacts & Collision */ = {
+			isa = PBXGroup;
+			children = (
+				45A6A351263D0B34000FD80B /* ColliderType.swift */,
+				45CEA74926452ABD00000CAE /* ContactNotifiableType.swift */,
+			);
+			path = "Physics Contacts & Collision";
+			sourceTree = "<group>";
+		};
+		45CEA73026452A2C00000CAE /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				45CEA73826452A4200000CAE /* BaseComponent.swift */,
+				45CEA73726452A4200000CAE /* NodeComponent.swift */,
+				45CEA73926452A4200000CAE /* PositionComponent.swift */,
+				45CEA74B26453AD700000CAE /* PhysicsComponent.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		45CEA73D26452A5C00000CAE /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				45CEA73E26452A6700000CAE /* BaseEntity.swift */,
+				45CEA73F26452A6700000CAE /* Droid.swift */,
+				45CEA74026452A6700000CAE /* Enemy.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		45CEA74426452A7A00000CAE /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				45CEA74626452A8F00000CAE /* Nameable.swift */,
+				45CEA74526452A8F00000CAE /* UpdatablePerFrame.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -299,13 +361,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				457186C3262AC667007C3BC4 /* GameViewController.swift in Sources */,
+				45CEA74C26453AD700000CAE /* PhysicsComponent.swift in Sources */,
+				45CEA74126452A6700000CAE /* BaseEntity.swift in Sources */,
 				458FFB77262AF65400B18991 /* Angle.swift in Sources */,
 				457186BF262AC667007C3BC4 /* AppDelegate.swift in Sources */,
+				45CEA73A26452A4200000CAE /* NodeComponent.swift in Sources */,
 				45B89940263743BA00823CC8 /* Vector+Point.swift in Sources */,
+				45CEA74726452A8F00000CAE /* UpdatablePerFrame.swift in Sources */,
 				458FFB7C262AF69D00B18991 /* Map.swift in Sources */,
+				45CEA74326452A6700000CAE /* Enemy.swift in Sources */,
+				45CEA74A26452ABD00000CAE /* ContactNotifiableType.swift in Sources */,
 				458FFB5A262AF22B00B18991 /* Actions+Extensions.swift in Sources */,
+				45CEA74826452A8F00000CAE /* Nameable.swift in Sources */,
+				45CEA74226452A6700000CAE /* Droid.swift in Sources */,
 				455217E3262DA488007388CF /* HUD.swift in Sources */,
 				458FFB5B262AF22B00B18991 /* Color+Extensions.swift in Sources */,
+				45CEA73C26452A4200000CAE /* PositionComponent.swift in Sources */,
+				45CEA73B26452A4200000CAE /* BaseComponent.swift in Sources */,
 				458FFB6F262AF32400B18991 /* GameHelper.swift in Sources */,
 				45A6A352263D0B34000FD80B /* ColliderType.swift in Sources */,
 				45B8993826373DF900823CC8 /* Direction.swift in Sources */,

@@ -54,6 +54,12 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Enemy.loadSharedAssets()
+        let x = ColliderType.Enemy.collisionMask
+//        let y = ColliderType.Enemy.contactMask
+        let z = ColliderType.Enemy.categoryMask
+
         setupScene()
         setupNodes()
         setupSounds()
@@ -130,7 +136,6 @@ class GameViewController: UIViewController {
         self.scnView.antialiasingMode = .none
         
         self.scnScene.physicsWorld.contactDelegate = self
-
     }
 
     func setupNodes() {
@@ -197,7 +202,7 @@ class GameViewController: UIViewController {
         }
         physics.collisionBitMask = 1
         physics.categoryBitMask = 1
-        physics.contactTestBitMask = ColliderType.barrier.rawValue | ColliderType.shot.rawValue | ColliderType.rocket.rawValue
+        physics.contactTestBitMask = ColliderType.Obstacle.rawValue | ColliderType.Shot.rawValue | ColliderType.Player.rawValue
         droidNode.physicsBody = physics
 
         return droidNode

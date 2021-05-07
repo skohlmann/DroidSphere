@@ -15,10 +15,32 @@
 //  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import Foundation
+import GameplayKit
+import SceneKit
 
-enum ColliderType : Int {
-    case droid   = 0b0001  // 1
-    case barrier = 0b0010  // 2
-    case shot    = 0b0100  // 4
-    case rocket  = 0b1000  // 8
+class NodeComponent : GKSCNNodeComponent {
+
+    override init(node: SCNNode) {
+        super.init(node: node)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func didAddToEntity() {
+        super.didAddToEntity()
+        if  let baseEntity = self.entity as? BaseEntity {
+            if  self.node.name == nil && baseEntity.name != nil {
+                self.node.name = baseEntity.name
+            } else if baseEntity.name == nil && self.node.name != nil {
+                baseEntity.name = self.node.name
+            }
+        }
+        self.node.isPaused = false
+    }
+    
+    override func willRemoveFromEntity() {
+        super.node.removeAllActions()  // ?
+    }
 }
